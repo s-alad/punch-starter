@@ -48,7 +48,9 @@ export default function Sidebar() {
                     <Link key={index} href={feed.href}>
                         { <feed.icon />}
                         <div>{feed.name}</div>
+
                     </Link>))
+                    
             }
             <div className={s.divider}></div>
             {
@@ -56,6 +58,9 @@ export default function Sidebar() {
                     <Link key={index} href={subchain.href}>
                         { <img src={subchain.icon} alt="icon" />}
                         <div>{subchain.name}</div>
+                        <h1 className="text-3xl font-bold text-red-500">
+      Hello world!d
+    </h1>
                     </Link>))
             }
         </nav>
