@@ -1,8 +1,10 @@
 import Head from "next/head";
 import Image from "next/image";
-import s from "./index.module.scss";
+
 import Top from "@/components/top/top";
-import ConnectWallet, { DeployContract } from "@/sdk-connection-code/stacks-connection";
+import ConnectWallet, {
+  DeployContract,
+} from "@/sdk-connection-code/stacks-connection";
 export default function Home() {
   return (
     <>
@@ -12,11 +14,11 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${s.main}`}>
-        <div className={s.left}>
+      <main>
+        <div>
           <Top />
         </div>
-        <div className={s.right}>
+        <div>
           <h1>Rising Touchers!</h1>
           <ConnectWallet />
           <DeployContract />
