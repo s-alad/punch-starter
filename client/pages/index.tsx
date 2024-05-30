@@ -5,6 +5,7 @@ import ConnectWallet, {
 import { ConnectButton } from "@suiet/wallet-kit";
 import Head from "next/head";
 import Image from "next/image";
+import {SuiWalletConnect} from "@/sdk-connection-code/sui-connection";
 import Top from "@/components/top/top";
 import s from "./index.module.scss";
 
@@ -24,7 +25,7 @@ export default function Home() {
         </div>
         <div className={s.right}>
           <h1>Rising Touchers!</h1>
-          <ConnectButton />
+          <SuiWalletConnect />
           <ConnectWallet />
           <DeployContract />
         </div>

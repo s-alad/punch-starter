@@ -9,10 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mysten/sui.js": "^0.54.1",
     "@radix-ui/themes": "^3.0.5",
     "@stacks/connect": "^7.7.1",
     "@stacks/connect-react": "^22.4.2",
     "@suiet/wallet-kit": "^0.2.24",
+    "mysten": "^1.1.4",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
