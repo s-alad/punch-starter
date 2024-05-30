@@ -1,7 +1,8 @@
 
 module sui_crowdfund::crowd_funding_project {
-    //use std::signer;
-    //use std::event;
+    use sui::coin::Coin;
+    use sui::sui::SUI;
+    use sui::balance::Balance;
 
     /// Represents one fund from a funder. A project looking for funds may have any number of funds
     public struct Fund has drop, store {
@@ -18,10 +19,12 @@ module sui_crowdfund::crowd_funding_project {
     }
 
     /// Represents a project that may be looking for funds.
-    public struct Project has store {
-        creator: address,
+    public struct Project has key, store {
+        id: UID,
+        owner: address,
         funds: vector<Fund>,
         milestones: vector<Milestone>,
+        balance: Balance<SUI>,
         total_funds: u64,
         fund_goal: u64,
         freeze_votes: u64,
@@ -31,18 +34,36 @@ module sui_crowdfund::crowd_funding_project {
 
     /// A "coin" owned by a specific project's creator. 
     public struct ProjectOwner has key, store {
-        id: UID, 
-        project: Project,
+        id: UID,
+        owner: address,
+    }
+
+    /// Returns true if the project has received enough funds to meet its goal
+    public fun is_funded(project: &Project): bool {
+        project.total_funds >= project.fund_goal
+    }
+
+    ///  Returns true if the current context is the owner of the project
+    public fun is_owner(project_owner: &ProjectOwner, project: &Project): bool {
+        &project.owner == project_owner.owner
     }
 
     /// Instantiates an empty project
     public fun create_project(
         ctx: &mut TxContext,
     ): ProjectOwner {
+
+        let owner = ProjectOwner {
+            id: object::new(ctx),
+            owner: ctx.sender(),
+        };
+
         let project = Project {
-            creator: ctx.sender(),
+            id: object::new(ctx),
+            owner: ctx.sender(),
             funds: vector::empty<Fund>(),
             milestones: vector::empty<Milestone>(),
+            balance: sui::balance::zero<SUI>(),
             total_funds: 0,
             fund_goal: 0,
             freeze_votes: 0,
@@ -50,10 +71,8 @@ module sui_crowdfund::crowd_funding_project {
             frozen: false,
         };
 
-        let owner = ProjectOwner {
-            id: object::new(ctx),
-            project: project,
-        };
+        // We need to make sure that the project is PUBLICLY available for users who want to fund it
+        transfer::share_object(project);
 
         owner
     }
@@ -62,32 +81,38 @@ module sui_crowdfund::crowd_funding_project {
     /// By passing a reference to the project owner, we can ensure that only the creator of the project can add milestones
     public fun add_milestone(
         project_owner: &mut ProjectOwner,
+        project: &mut Project,
         fund_goal: u64,
     ) {
-        assert!(!project_owner.project.frozen, 1);
+        assert!(!project.frozen, 1);
+        assert!(is_owner(project_owner, project), 2);
 
-        project_owner.project.milestones.push_back(Milestone {
+        project.milestones.push_back(Milestone {
             creator_already_took_funds: false,
             fund_goal: fund_goal,
             complete_votes: 0,
             complete_voters: vector::empty<address>(),
         });
-        project_owner.project.fund_goal = project_owner.project.fund_goal + fund_goal;
+        project.fund_goal = project.fund_goal + fund_goal;
     }
 
     /// Used by funders to fund a project they like
     public fun add_fund(
         ctx: &mut TxContext,
         project: &mut Project,
-        amount: u64,
+        coin: Coin<SUI>,
     ) {
         assert!(!project.frozen, 1);
 
+        // destroys the coin and converts it to a balance
+        let balance = coin.into_balance();
+        let balance_value: u64 = balance.value();
+        project.balance.join(balance);
+
         project.funds.push_back(Fund {
-            amount: amount,
+            amount: balance_value,
             funder: ctx.sender(),
         });
-        project.total_funds = project.total_funds + amount;
     }  
 
     /// Used by funders to vote on a milestone being complete.
@@ -96,7 +121,7 @@ module sui_crowdfund::crowd_funding_project {
         project: &mut Project,
         milestone_index: u64,
     ) {
-        assert!(project.total_funds < project.fund_goal, 1);
+        assert!(project.total_funds >= project.fund_goal, 1);
         assert!(!project.frozen, 2);
         assert!(project.milestones.length() > milestone_index, 3);
 
@@ -124,17 +149,21 @@ module sui_crowdfund::crowd_funding_project {
     }
 
     public fun redeem_milestone(
-        project_owner: &mut ProjectOwner,
+        ctx: &mut TxContext,
+        project_owner: &ProjectOwner,
+        project: &mut Project,
         milestone_index: u64,
-    ) {
-        let project = &mut project_owner.project;
-        assert!(project.milestones.length() > milestone_index, 1);
+    ): Coin<SUI> {
+        assert!(is_owner(project_owner, project), 1);
+        assert!(project.milestones.length() > milestone_index, 2);
         let milestone = &mut project.milestones[milestone_index];
-        assert!(milestone.complete_votes > project.fund_goal / 2, 2);
-        assert!(!milestone.creator_already_took_funds, 3);
+        assert!(milestone.complete_votes > project.fund_goal / 2, 3);
+        assert!(!milestone.creator_already_took_funds, 4);
 
-        // TODO Actually send the funds to the project owner
         milestone.creator_already_took_funds = true;
+        let reward_balance = project.balance.split(project.fund_goal);
+        
+        sui::coin::from_balance(reward_balance, ctx)
     }
 
     /// Used by funders to attempt to revoke their funding, if the project is suspicious 
@@ -143,7 +172,7 @@ module sui_crowdfund::crowd_funding_project {
         project: &mut Project,
     ) {
         // A project can only be frozen if it has been fully funded
-        assert!(project.total_funds < project.fund_goal, 1);
+        assert!(is_funded(project), 1);
         assert!(!project.frozen, 2);
 
         // Make sure they haven't already voted
@@ -171,29 +200,29 @@ module sui_crowdfund::crowd_funding_project {
 
         if (project.freeze_votes > project.total_funds * 3 / 4) {
             project.frozen = true;
-        }
+        };
     }
 
     /// Used by funders after a project is already frozen to get their funds back
     public fun getRefund(
         ctx: &mut TxContext,
         project: &mut Project,
-    ) {
+    ): Coin<SUI> {
         assert!(project.frozen, 1);
 
         let mut i: u64 = 0;
+        let mut return_funds: u64 = 0;
         while (i < project.funds.length()) {
             let fund = &project.funds[i];
             if (fund.funder == ctx.sender()) {
-                project.total_funds = project.total_funds - fund.amount;
-                project.funds.remove(i);
-
-                // TODO Actually send the funds back to the funder
-                
-                return
+                return_funds = return_funds + fund.amount;
             };
 
             i = i + 1;
-        } 
+        };
+
+        let refund = project.balance.split(return_funds);
+
+        sui::coin::from_balance(refund, ctx)
     }
 }
