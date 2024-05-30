@@ -7,13 +7,22 @@
     width: 100%;
     @include bg.background();
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 20px;
     padding: 3rem 3rem;
     font-family: "Nunito", sans-serif;
     color: black;
 
     .left {
-        width: 52%;
+        flex: 1;
+    }   
+    .right {
+        flex: 1;
+        border: 1px solid black;
+        h1 {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
     }
 
 }

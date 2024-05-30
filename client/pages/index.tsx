@@ -15,8 +15,8 @@ export default function Home() {
         <div className={s.left}>
           <Top />
         </div>
-        <div>
-          
+        <div className={s.right}>
+          <h1>Rising Touchers!</h1>
         </div>
       </main>
     </>
