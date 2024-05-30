@@ -1,11 +1,11 @@
 import Head from "next/head";
 import Image from "next/image";
-import s from "./index.module.scss"
+import s from "./index.module.scss";
 import Top from "@/components/top/top";
 export default function Home() {
   return (
     <>
-      <Head>  
+      <Head>
         <title>Lift</title>
         <meta name="description" content="lift" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
