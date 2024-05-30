@@ -31,9 +31,9 @@ export const SuiWalletConnect = () => {
 
     // define a programmable transaction
     const tx = new TransactionBlock();
-    const packageObjectId = "0x895e5f5bb0a4d433694b66ded5658363ac452195c9d08de984aeeccf6154a04f";
+    const packageObjectId = "0xd32d8b0620fec07205bc62ff76bea0b3b4af372c7b3ef002065517df878ab075";
     tx.moveCall({
-      target: `${packageObjectId}::crowd_funding_project::create_project`,
+      target: `${packageObjectId}::sui_crowdfund::create_project`,
       arguments: [tx.pure("Example NFT")],
     });
 
