@@ -8,16 +8,11 @@ import {
 } from "@stacks/connect";
 import { StacksTestnet, StacksMainnet } from "@stacks/network";
 import React, { useEffect, useState } from "react";
-import { useConnect } from "@stacks/connect-react";
+import { useConnect, Connect, StacksProvider } from "@stacks/connect-react";
 
 const appConfig = new AppConfig(["store_write", "publish_data"]);
 const userSession = new UserSession({ appConfig });
 
-import fs from "fs";
-const codeBody = fs.readFileSync(
-  "../../contracts/stacks/contracts/Campaign.clar",
-  "utf8"
-);
 const mainnet = new StacksMainnet();
 const testnet = new StacksTestnet();
 
@@ -83,23 +78,13 @@ function ConnectWallet() {
 
 export default ConnectWallet;
 
-openContractDeploy({
-  contractName: "my-contract-name",
-  codeBody,
-  appDetails: {
-    name: "Campaign",
-    icon: "",
-  },
-  network: testnet,
-  onFinish: (data) => {
-    console.log("Stacks Transaction:", data.stacksTransaction);
-    console.log("Transaction ID:", data.txId);
-    console.log("Raw transaction:", data.txRaw);
-  },
-});
 
 function DeployContract() {
   const handleDeployContract = async () => {
+    const response = await fetch(
+      "../../contracts/stacks/contracts/Campaign.clar"
+    );
+    const codeBody = await response.text();
     await openContractDeploy({
       contractName: "Campaign", //Add uuid for unique wallet
       codeBody,
@@ -117,8 +102,20 @@ function DeployContract() {
   };
 
   return (
+    <Connect
+      authOptions={{
+        appDetails: {
+          name: "rheo",
+          icon: window.location.origin + "/logo512.png",
+        },
+        userSession,
+      }}
+    >
     <button className="Deploy" onClick={handleDeployContract}>
       Activate Funding
     </button>
+    </Connect>
   );
 }
+
+export { DeployContract };
