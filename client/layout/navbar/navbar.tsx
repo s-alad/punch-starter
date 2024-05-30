@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { FaHandPointer, FaSearch, FaUser } from "react-icons/fa";
-import s from "./navbar.module.scss"
+
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/authcontext";
 
@@ -24,24 +24,24 @@ export default function Navbar() {
     }
 
     return (
-        <nav className={s.nav}>
-            <div className={s.splash}>
+        <nav className={"w-full bg-red-400"}>
+            <div className={""}>
                 <FaHandPointer />
-                <div>Touched</div>
+                <div>Punchstarter</div>
             </div>
-            <div className={s.search}>
+            <div className={""}>
                 <input
                     type="text"
                     placeholder="Search for projects"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
-                <div className={s.magnify}
+                <div className={""}
                     onClick={lookup}
                 ><FaSearch /></div>
             </div>
-            <div className={s.actions}>
-                <div className={s.connect}>
+            <div className={""}>
+                <div className={""}>
                     <FaUser />
                     <div>{"connect"}</div>
                 </div>

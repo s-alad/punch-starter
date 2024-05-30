@@ -6,6 +6,7 @@ import s from "./sidebar.module.scss"
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/authcontext";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function Sidebar() {
     const router = useRouter();
@@ -48,7 +49,6 @@ export default function Sidebar() {
                     <Link key={index} href={feed.href}>
                         { <feed.icon />}
                         <div>{feed.name}</div>
-
                     </Link>))
                     
             }
@@ -58,9 +58,6 @@ export default function Sidebar() {
                     <Link key={index} href={subchain.href}>
                         { <img src={subchain.icon} alt="icon" />}
                         <div>{subchain.name}</div>
-                        <h1 className="text-3xl font-bold text-red-500">
-      Hello world!d
-    </h1>
                     </Link>))
             }
         </nav>
