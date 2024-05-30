@@ -24,8 +24,8 @@ export const mdb = new MongoClient(mongourl, {
     }
 });
 mdb.connect()
-    .then(() => { console.log("[mongodb]: Connected to MongoDB");})
-    .catch((err) => { console.error("[mongodb]: Failed to connect to MongoDB", err);});
+    .then(() => { console.log("[mongodb]: Connected to MongoDB"); })
+    .catch((err) => { console.error("[mongodb]: Failed to connect to MongoDB", err); });
 
 app.get('/', (_: Request, res: Response) => { res.status(200).send("/"); })
 app.use('/main', mainrouter);

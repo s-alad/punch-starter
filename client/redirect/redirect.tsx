@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useAuth } from "@/context/authcontext";
 
 
 // these are the protected routes that you need token verification
@@ -31,7 +32,7 @@ export default function RedirectBasedOnAuth({ children }: { children: React.Reac
         } else {}
 
         if (protectedRoutes.includes(currentRoute)) {
-            if ((!user?.isUserSignedIn() && !calledPush)) {
+            if ((!user && !calledPush)) {
                 setCalledPush(true);
                 router.push("/");
                 return;
