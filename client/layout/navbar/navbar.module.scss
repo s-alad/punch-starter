@@ -5,23 +5,20 @@
 .nav {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 30px 60px;
+    padding: 3rem 3rem;
     background-color: p.$orange;
-    color: black;
 
-    .rheo {
-        color: inherit;
-        font-size: 32px;
-        font-family: Georgia, 'Times New Roman', Times, serif;
-        width: 20%;
-        cursor: pointer;
-        font-weight: bold;
+    .splash {
+        font-size: 42px;
+        line-height: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
     }
 
     .search {
         width: 38%;
-        /* padding: 8px; */
         background-color: transparent;
         border: 2px solid black;
         border-radius: 6px;
@@ -43,40 +40,15 @@
         }
     }
 
-    span {
-        width: 20%;
-        display: flex;
-        gap: 20px;
-        align-items: center;
-
-        .cta {
-            padding: 8px;
-            border-radius: 4px;
-            border: 2px solid black;
-            background-color: transparent;
-            color: inherit;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .connect, .disconnect {
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid black;
-            background-color: black;
+    .actions {
+        .connect {
+            display: flex;
+            align-items: center;
+            background-color: p.$gray;
+            padding: .75rem 2rem;
             color: white;
-            cursor: pointer;
-        }
-
-        .profile {
-            cursor: pointer;
-            padding: 8px;
-            height: 32px;
-            width: 32px;
-            @include c.center();
-            color: inherit;
-            border: 2px solid black;
-            border-radius: 50%;
+            border-radius: 6px;
+            gap: 10px;
         }
     }
 }

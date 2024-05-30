@@ -1,0 +1,19 @@
+@use "../styles/background.scss" as bg;
+@use "../styles/common.scss" as c;
+@use "../styles/palette.scss" as p;
+
+.main {
+    min-height: 100%;
+    width: 100%;
+    @include bg.background();
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 3rem;
+    font-family: "Nunito", sans-serif;
+    color: black;
+
+    .left {
+        width: 52%;
+    }
+
+}
