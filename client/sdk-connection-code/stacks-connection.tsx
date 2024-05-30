@@ -38,7 +38,7 @@ function ConnectWallet() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const { sign } = useConnect();
+  // const { sign } = useConnect();
   const signmessage = async () => {
     const options: SignatureRequestOptions = {
       message: "authentication",
@@ -78,7 +78,6 @@ function ConnectWallet() {
 
 export default ConnectWallet;
 
-
 function DeployContract() {
   const handleDeployContract = async () => {
     const response = await fetch(
@@ -111,9 +110,9 @@ function DeployContract() {
         userSession,
       }}
     >
-    <button className="Deploy" onClick={handleDeployContract}>
-      Activate Funding
-    </button>
+      <button className="Deploy" onClick={handleDeployContract}>
+        Activate Funding
+      </button>
     </Connect>
   );
 }
