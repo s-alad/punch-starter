@@ -80,7 +80,7 @@ contract fundingDao {
     /**
      *
      * @param _creator Beneficiary of crowdfund
-     * @param _fundingGoal Amount to be raised
+     * @param _fundingGoal Amount to be raised in Rootoshi
      * @param _duration Time to raise
      * @param _milestoneDescriptions Descriptions of the milstones to be completed
      */
