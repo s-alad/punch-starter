@@ -57,8 +57,8 @@ export const SuiWalletConnect = () => {
   }
 
   return (
-    <div style={{margin: 20}}>
-      <h4>Sui</h4>
+    <div style={{margin: 10, padding: 10, border: '1px solid black', borderRadius: 10}}>
+      <h4>Sui Wallet</h4>
       <ConnectButton></ConnectButton>
       {wallet.connected && (<div>
         <button
