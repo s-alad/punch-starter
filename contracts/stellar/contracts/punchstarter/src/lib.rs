@@ -10,6 +10,13 @@ const FRZ_VOTE: Symbol = symbol_short!("FRZ_VOTE");
 const FRZ_VOTER: Symbol = symbol_short!("FRZ_VOTER");
 const FROZEN: Symbol = symbol_short!("FROZEN");
 
+const MILESTONE_NAMES: Symbol = symbol_short!("MILE_NM");
+const MILESTONE_AMOUNTS: Symbol = symbol_short!("MILE_AMT");
+const MILESTONE_DESCRIPTIONS: Symbol = symbol_short!("MILE_DESC");
+const MILESTONE_CLAIMED: Symbol = symbol_short!("MILE_CLM");
+
+const PROJECT_VOTES: Symbol = symbol_short!("PRJ_VTS");
+
 #[contract]
 pub struct CrowdfundContract;
 
@@ -25,6 +32,13 @@ impl CrowdfundContract {
         env.storage().instance().set(&FRZ_VOTER, &Vec::<Address>::new(&env));
         env.storage().instance().set(&FROZEN, &false);
 
+        env.storage().instance().set(&MILESTONE_NAMES, &Vec::<Symbol>::new(&env));
+        env.storage().instance().set(&MILESTONE_AMOUNTS, &Vec::<u64>::new(&env));
+        env.storage().instance().set(&MILESTONE_DESCRIPTIONS, &Vec::<Symbol>::new(&env));
+        env.storage().instance().set(&MILESTONE_CLAIMED, &Vec::<u64>::new(&env));
+
+        env.storage().instance().set(&PROJECT_VOTES, &0u64);
+
         log!(&env, "Project created with owner: {:?}, goal: {}", owner, goal);
     }
 
@@ -38,6 +52,13 @@ impl CrowdfundContract {
         let frz_voter: Vec<Address> = env.storage().instance().get(&FRZ_VOTER).unwrap();
         let frozen: bool = env.storage().instance().get(&FROZEN).unwrap();
 
+        let milestone_names: Vec<Symbol> = env.storage().instance().get(&MILESTONE_NAMES).unwrap();
+        let milestone_amounts: Vec<u64> = env.storage().instance().get(&MILESTONE_AMOUNTS).unwrap();
+        let milestone_descriptions: Vec<Symbol> = env.storage().instance().get(&MILESTONE_DESCRIPTIONS).unwrap();
+        let milestone_claimed: Vec<u64> = env.storage().instance().get(&MILESTONE_CLAIMED).unwrap();
+
+        let project_votes: u64 = env.storage().instance().get(&PROJECT_VOTES).unwrap();
+
         log!(&env, "Owner: {:?}", owner);
         log!(&env, "Fund Amounts: {:?}", fund_amt);
         log!(&env, "Funders: {:?}", funders);
@@ -46,6 +67,13 @@ impl CrowdfundContract {
         log!(&env, "Freeze Votes: {}", frz_vote);
         log!(&env, "Freeze Voters: {:?}", frz_voter);
         log!(&env, "Frozen: {}", frozen);
+
+        log!(&env, "Milestone Names: {:?}", milestone_names);
+        log!(&env, "Milestone Amounts: {:?}", milestone_amounts);
+        log!(&env, "Milestone Descriptions: {:?}", milestone_descriptions);
+        log!(&env, "Milestone Claimed: {:?}", milestone_claimed);
+
+        log!(&env, "Project Votes: {}", project_votes);
     }
 
     pub fn add_fund(env: Env, amount: u64, funder: Address) {
@@ -53,8 +81,8 @@ impl CrowdfundContract {
         let mut funders: Vec<Address> = env.storage().instance().get(&FUNDERS).unwrap();
         let mut tot_funds: u64 = env.storage().instance().get(&TOT_FUNDS).unwrap();
 
-        fund_amt.append(&mut vec![&env, amount]);
-        funders.append(&mut vec![&env, funder.clone()]);
+        fund_amt.push_back(amount);
+        funders.push_back(funder.clone());
         tot_funds += amount;
 
         env.storage().instance().set(&FUND_AMT, &fund_amt);
@@ -62,5 +90,50 @@ impl CrowdfundContract {
         env.storage().instance().set(&TOT_FUNDS, &tot_funds);
 
         log!(&env, "Fund added by {:?} of amount: {}. Total funds: {}", funder, amount, tot_funds);
+    }
+
+    pub fn add_milestone(env: Env, name: Symbol, amount: u64, description: Symbol) {
+        let mut milestone_names: Vec<Symbol> = env.storage().instance().get(&MILESTONE_NAMES).unwrap();
+        let mut milestone_amounts: Vec<u64> = env.storage().instance().get(&MILESTONE_AMOUNTS).unwrap();
+        let mut milestone_descriptions: Vec<Symbol> = env.storage().instance().get(&MILESTONE_DESCRIPTIONS).unwrap();
+        let mut milestone_claimed: Vec<u64> = env.storage().instance().get(&MILESTONE_CLAIMED).unwrap();
+
+        milestone_names.push_back(name.clone());
+        milestone_amounts.push_back(amount);
+        milestone_descriptions.push_back(description);
+        milestone_claimed.push_back(0);
+
+        env.storage().instance().set(&MILESTONE_NAMES, &milestone_names);
+        env.storage().instance().set(&MILESTONE_AMOUNTS, &milestone_amounts);
+        env.storage().instance().set(&MILESTONE_DESCRIPTIONS, &milestone_descriptions);
+        env.storage().instance().set(&MILESTONE_CLAIMED, &milestone_claimed);
+
+        log!(&env, "Milestone added: {} - {}", name, amount);
+    }
+
+    pub fn claim_milestone(env: Env, milestone_index: u32) {
+        let mut milestone_claimed: Vec<u64> = env.storage().instance().get(&MILESTONE_CLAIMED).unwrap();
+
+        milestone_claimed.push_back(milestone_index as u64);
+
+        env.storage().instance().set(&MILESTONE_CLAIMED, &milestone_claimed);
+
+        log!(&env, "Milestone {} claimed", milestone_index);
+    }
+
+    pub fn vote_freeze(env: Env, funder: Address, votes: u64) {
+        let mut frz_vote: u64 = env.storage().instance().get(&FRZ_VOTE).unwrap();
+        let mut frz_voter: Vec<Address> = env.storage().instance().get(&FRZ_VOTER).unwrap();
+        let mut project_votes: u64 = env.storage().instance().get(&PROJECT_VOTES).unwrap();
+
+        frz_vote += votes;
+        frz_voter.push_back(funder.clone());
+        project_votes += votes;
+
+        env.storage().instance().set(&FRZ_VOTE, &frz_vote);
+        env.storage().instance().set(&FRZ_VOTER, &frz_voter);
+        env.storage().instance().set(&PROJECT_VOTES, &project_votes);
+
+        log!(&env, "Freeze vote by {:?} with {} votes. Total freeze votes: {}", funder, votes, frz_vote);
     }
 }
