@@ -66,7 +66,7 @@ export default function Navbar() {
 
         <Box
           flex={{ base: "1" }}
-          mx={{ base: "0", md: "20px" }} // Added margin for desktop view
+          mx={{ base: "0", md: "50px" }} // Added margin for desktop view
           width={{ base: "100%", md: "auto" }}
         >
           <InputGroup height="30px" width="100%">
