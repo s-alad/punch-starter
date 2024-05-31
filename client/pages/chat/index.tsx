@@ -53,9 +53,7 @@ export function ChatUI(project: any, creator: any) {
       Creator: ${creatorString}`,
       },
     ]);
-    setGeneratedResponse(
-      `Ask me anything about the project \'${project.projectname}\' or the creator \'${creator.name}\'.`
-    );
+    setGeneratedResponse(`Ask me anything about the project or the creator!`);
     setLoading(false);
   }
 
@@ -132,7 +130,7 @@ export function ChatUI(project: any, creator: any) {
 
   return (
     <main>
-      <div style={{ display: "flex", flexDirection: "row", gap: 40 }}>
+      <div style={{ display: "flex", flexDirection: "row", gap: 40, maxWidth: "80%" }}>
         {creator && (
           <Card style={{ textAlign: "center", marginTop: 50 }}>
             <div>
