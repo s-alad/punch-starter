@@ -2,10 +2,10 @@
 (define-constant ERR-NOT-ENOUGH-FUNDS (err u100))
 (define-constant ERR-ALREADY-FUNDED (err u101))
 (define-constant ERR-ALREADY-CLAIMED (err u102))
-(define-constant ERR-NO-ACTIVE-MILESTONE-SUBMISSIONS (err u103))
 (define-constant ERR-ONLY-OWNER (err u104))
 (define-constant ERR-ALREADY-VOTED (err u105))
 (define-constant ERR-CONTRACT-FROZEN (err u106))
+(define-constant )
 
 ;; global variables
 (define-data-var funding-goal uint u0)
@@ -21,13 +21,13 @@
 (define-data-var funded bool false)
 (define-data-var total-tokens uint u0)
 (define-data-var stats-per-token uint u0)
-(define-data-var claimed-first bool false)
 (define-data-var owner principal tx-sender)
 (define-map has-voted-milestone { user:principal, milestone:uint} bool)
 (define-map vote-frozen principal bool)
 (define-data-var num-frozen-votes uint u0)
 (define-data-var frozen bool false)
 (define-map refunded principal bool)
+(define-data-var milestones-unclaimed uint u0)
 
 ;; Private Functions
 
@@ -117,10 +117,11 @@
     (begin 
         (asserts! (is-eq tx-sender (var-get owner))  ERR-ONLY-OWNER)
         (asserts! (is-eq (var-get funded) true) ERR-NOT-ENOUGH-FUNDS)
+        (asserts! (<= index var-get(num-milestones)) )
         ;; (asserts! (is-eq (var-get claimed-first) false) ERR-ALREADY-CLAIMED)
-        ;; (var-set current-milestone (+ u1 (var-get current-milestone)))
-        ;; (var-set claimed-first true)
-        ;; (as-contract (stx-transfer? (/ (stx-get-balance tx-sender) (var-get num-milestones)) tx-sender (var-get owner)))
+        (map-insert milestones index (merge (map-get? milestones) {claimed: true}))
+        (as-contract (stx-transfer? (/ (stx-get-balance tx-sender) (var-get milestones-unclaimed)) tx-sender (var-get owner)))
+        (var-set milestones-unclaimed (- u1 (var-get milestones-unclaimed)))
     )
 )
 
