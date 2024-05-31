@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Heading, Flex, Image, Text, Icon } from "@chakra-ui/react";
+import { Box, Heading, Flex, Image, Text } from "@chakra-ui/react";
 import { ArrowUpIcon } from "@chakra-ui/icons";
 
 interface LeaderboardProps {
@@ -52,7 +52,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data }) => {
           </Flex>
 
           <Flex alignItems="center">
-            <Icon as={ArrowUpIcon} color="#d3d3d3" mr={1} />
+            {/* <Icon as={ArrowUpIcon} color="#d3d3d3" mr={1} /> */}
             <Text fontSize="sm" fontWeight={"800"} color="#d3d3d3">
               {item.upvoteCount}
             </Text>
