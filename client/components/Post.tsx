@@ -29,6 +29,13 @@ const Post: React.FC<CardProps> = ({
   upvoteCount,
   onUpvote,
 }) => {
+  const [isUpvoted, setIsUpvoted] = React.useState(false);
+
+  const handleUpvote = () => {
+    setIsUpvoted(true);
+    onUpvote();
+  };
+
   return (
     <Card borderRadius="lg" overflow="hidden" boxShadow="md" h="100%">
       <Box h="60%" overflow="hidden">
@@ -49,7 +56,8 @@ const Post: React.FC<CardProps> = ({
             icon={<ArrowUpIcon />}
             variant="ghost"
             size="sm"
-            onClick={onUpvote}
+            onClick={handleUpvote}
+            color={isUpvoted ? "orange.500" : undefined}
           />
           <Text fontWeight="bold" ml={2} fontSize="sm">
             {upvoteCount}

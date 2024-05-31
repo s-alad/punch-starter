@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, SimpleGrid } from "@chakra-ui/react";
 import Post from "@/components/Post";
 
@@ -7,8 +7,7 @@ interface Post {
   author: string;
   description: string;
   image: string;
-  upvoteCount: number;
-  onUpvote: () => void;
+  initialUpvoteCount: number;
 }
 
 const examplePosts: Post[] = [
@@ -18,16 +17,14 @@ const examplePosts: Post[] = [
     description:
       "BeFit revolutionizes fitness motivation by blending the spontaneity of BeReal with the accountability and rewards of exercising. At random times, BeFit prompts users to",
     image: "./befit.jpeg",
-    upvoteCount: 71,
-    onUpvote: () => console.log("Upvoted Project 1"),
+    initialUpvoteCount: 71,
   },
   {
     projectName: "Movelo",
     author: "Colin, Wes, & Saad",
     description: "",
     image: "./movelo.png",
-    upvoteCount: 62,
-    onUpvote: () => console.log("Upvoted Project 2"),
+    initialUpvoteCount: 62,
   },
   {
     projectName: "ZkVote",
@@ -35,12 +32,25 @@ const examplePosts: Post[] = [
     description:
       "A new way to commute. Pay for your morning coffee with your bike ride.",
     image: "/zkvote.png",
-    upvoteCount: 25,
-    onUpvote: () => console.log("Upvoted Project 2"),
+    initialUpvoteCount: 25,
   },
 ];
 
 export default function Explore() {
+  const [upvoteCounts, setUpvoteCounts] = useState<Record<number, number>>(
+    examplePosts.reduce(
+      (acc, post, index) => ({ ...acc, [index]: post.initialUpvoteCount }),
+      {}
+    )
+  );
+
+  const handleUpvote = (index: number) => {
+    setUpvoteCounts((prevCounts) => ({
+      ...prevCounts,
+      [index]: prevCounts[index] + 1,
+    }));
+  };
+
   return (
     <Box>
       <Box mb="10px"></Box>
@@ -51,15 +61,14 @@ export default function Explore() {
         alignItems="center"
       >
         {examplePosts.map((post, index) => (
-          <Box maxW={"350px"} height="450px">
+          <Box key={index} maxW={"350px"} height="450px">
             <Post
-              key={index}
               projectName={post.projectName}
               author={post.author}
               description={post.description}
               image={post.image}
-              upvoteCount={post.upvoteCount}
-              onUpvote={post.onUpvote}
+              upvoteCount={upvoteCounts[index]}
+              onUpvote={() => handleUpvote(index)}
             />
           </Box>
         ))}
