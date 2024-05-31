@@ -129,7 +129,7 @@ export function ChatUI(project: any, creator: any) {
   };
 
   return (
-    <main>
+    creator && project && <main>
       <div style={{ display: "flex", flexDirection: "row", gap: 40, maxWidth: "80%" }}>
         {creator && (
           <Card style={{ textAlign: "center", marginTop: 50 }}>

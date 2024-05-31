@@ -31,6 +31,7 @@ export default function Projects() {
 
   const { session, puncher } = useAuth();
   const [project, setProject] = useState<Project>();
+  const [creator, setCreator] = useState(exampleCreator);
   const [milestones, setMilestones] = useState<Milestone[]>([]);
 
   let [comments, setComments] = useState<Comment[]>([]);
@@ -325,7 +326,7 @@ export default function Projects() {
                   >
                     dao!
                   </button>
-                  <ChatUI project={project} creator={exampleCreator} />
+                  <ChatUI project={project} creator={creator} />
                 </>
               )}
             </div>
