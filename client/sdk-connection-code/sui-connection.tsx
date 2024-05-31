@@ -34,7 +34,7 @@ export const SuiWalletConnect = () => {
     const packageObjectId = "0xd32d8b0620fec07205bc62ff76bea0b3b4af372c7b3ef002065517df878ab075";
     tx.moveCall({
       target: `${packageObjectId}::sui_crowdfund::create_project`,
-      arguments: [tx.pure("Example NFT")],
+      arguments: [],
     });
 
     try {
