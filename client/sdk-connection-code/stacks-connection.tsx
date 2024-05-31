@@ -2,10 +2,20 @@ import {
   AppConfig,
   UserSession,
   openContractDeploy,
+  openContractCall,
   showConnect,
   SignatureData,
   SignatureRequestOptions,
 } from "@stacks/connect";
+import {
+  uintCV,
+  intCV,
+  bufferCV,
+  stringAsciiCV,
+  stringUtf8CV,
+  standardPrincipalCV,
+  trueCV,
+} from '@stacks/transactions';
 import { StacksTestnet, StacksMainnet } from "@stacks/network";
 import React, { useEffect, useState } from "react";
 import { useConnect, Connect, StacksProvider } from "@stacks/connect-react";
@@ -19,7 +29,7 @@ const testnet = new StacksTestnet();
 function authenticate() {
   showConnect({
     appDetails: {
-      name: "rheo",
+      name: "Punch Starter",
       icon: window.location.origin + "/logo512.png",
     },
     redirectTo: "/",
@@ -38,12 +48,12 @@ function ConnectWallet() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // const { sign } = useConnect();
+  const { sign } = useConnect();
   const signmessage = async () => {
     const options: SignatureRequestOptions = {
       message: "authentication",
       appDetails: {
-        name: "rheo",
+        name: "Punch Starter",
         icon: window.location.origin + "/logo512.png",
       },
       onFinish(data: SignatureData) {
@@ -78,33 +88,64 @@ function ConnectWallet() {
 
 export default ConnectWallet;
 
-function DeployContract() {
+interface DeployContractProps {
+  fundingGoal: number;
+  blockDuration: number;
+  numberOfMilestones: number;
+}
+
+const [ address, setAddress ] = useState("");
+const [ contractName, setContractName ] = useState("");
+
+function DeployContract({fundingGoal, blockDuration, numberOfMilestones} : DeployContractProps) {
+
+  const functionArgs = [
+    uintCV(fundingGoal),
+    uintCV(blockDuration),
+    uintCV(numberOfMilestones)
+  ];
+
+  const options = {
+    contractAddress: address,
+    contractName: contractName,
+    functionName: 'start',
+    functionArgs,
+    appDetails: {
+      name: 'Punch Starter',
+      icon: ""
+    },
+    onFinish: () => {
+      
+    },
+  }
+
   const handleDeployContract = async () => {
     const response = await fetch(
       "../../contracts/stacks/contracts/Campaign.clar"
     );
     const codeBody = await response.text();
     await openContractDeploy({
-      contractName: "Campaign", //Add uuid for unique wallet
+      contractName: contractName, //Add uuid for unique wallet
       codeBody,
       appDetails: {
-        name: "Uplift",
+        name: "Punch Starter",
         icon: "",
       },
       network: testnet,
       onFinish: (data) => {
-        console.log("Stacks Transaction:", data.stacksTransaction);
-        console.log("Transaction ID:", data.txId);
-        console.log("Raw transaction:", data.txRaw);
+          setAddress("");
+          openContractCall(options);
       },
     });
   };
+
+
 
   return (
     <Connect
       authOptions={{
         appDetails: {
-          name: "rheo",
+          name: "Punch Starter",
           icon: window.location.origin + "/logo512.png",
         },
         userSession,
@@ -118,3 +159,130 @@ function DeployContract() {
 }
 
 export { DeployContract };
+
+
+function donateStacks(amount: number) {
+  const functionArgs = [
+    uintCV(amount)
+  ];
+
+  const options = {
+      contractAddress: address,
+      contractName: contractName,
+      functionName: 'donate',
+      functionArgs,
+      appDetails: {
+        name: 'Punch Starter',
+        icon: '',
+      },
+      onFinish: () => {
+
+      }
+  };
+
+  openContractCall(options);
+}
+
+// function claimRefundStacks() {
+
+//   const options = {
+//       contractAddress: address,
+//       contractName: contractName,
+//       functionName: 'claim-refund',
+//       appDetails: {
+//         name: 'Punch Starter',
+//         icon: '',
+//       },
+//       onFinish: () => {
+
+//       }
+//   };
+
+//   openContractCall(options);
+// }
+
+
+function claimMilestoneStacks(index: number) {
+    const functionArgs = [
+      uintCV(index)
+    ];
+
+    const options = {
+      contractAddress: address,
+      contractName: contractName,
+      functionName: 'claim-milestone',
+      functionArgs,
+      appDetails: {
+        name: 'Punch Starter',
+        icon: '',
+      },
+      onFinish: () => {
+
+      }
+    };
+
+    openContractCall(options);
+}
+
+function submitMilestoneStacks(submissionsDetails: string, index: number){
+  const functionArgs = [
+    stringAsciiCV(submissionsDetails),
+    uintCV(index)
+  ];
+
+  const options = {
+    contractAddress: address,
+    contractName: contractName,
+    functionName: 'submit-milestone',
+    functionArgs,
+    appDetails: {
+      name: 'Punch Starter',
+      icon: '',
+    },
+    onFinish: () => {
+
+    }
+  };
+
+  openContractCall(options);
+}
+
+function voteOnMilestone(index: number){
+  const functionArgs = [
+    uintCV(index)
+  ];
+
+  const options = {
+    contractAddress: address,
+    contractName: contractName,
+    functionName: 'vote-on-milestone',
+    functionArgs,
+    appDetails: {
+      name: 'Punch Starter',
+      icon: '',
+    },
+    onFinish: () => {
+
+    }
+  };
+
+  openContractCall(options);
+}
+
+function voteToFreeze() {
+  // const options = {
+  //   contractAddress: address,
+  //   contractName: contractName,
+  //   functionName: 'vote-to-freeze',
+  //   appDetails: {
+  //     name: 'Punch Starter',
+  //     icon: '',
+  //   },
+  //   onFinish: () => {
+
+  //   }
+  // };
+
+  // openContractCall(options);
+}
+

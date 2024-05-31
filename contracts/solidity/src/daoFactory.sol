@@ -15,7 +15,6 @@ contract daoFactory {
 
     /**
      * 
-     * @param _creator Beneficiary of crowdfund
      * @param _fundingGoal Amount to be raised in Rootoshi
      * @param _duration Duration of the project in blocks
      * @param _milestoneDescriptions Descriptions of the milstones to be completed
@@ -23,14 +22,13 @@ contract daoFactory {
      * @dev Launches a campaign and stores the details
      */
     function createCampaign(
-        address _creator,
         uint256 _fundingGoal,
         uint256 _duration,
         string[] memory _milestoneDescriptions,
         string memory _uuid
     ) external returns (address) {
         fundingDao temp = new fundingDao(
-            _creator,
+            msg.sender,
             _fundingGoal,
             _duration,
             _milestoneDescriptions

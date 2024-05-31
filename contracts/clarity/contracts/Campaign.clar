@@ -110,7 +110,8 @@
             ERR-NOT-ENOUGH-FUNDS
         )
         (map-insert refunded tx-sender true)
-        (as-contract (stx-transfer? (* (var-get stats-per-token) (default-to u0 (map-get? donator-stx-tokens sender))) tx-sender sender)))
+        (as-contract (stx-transfer? (* (var-get stats-per-token) (default-to u0 (map-get? donator-stx-tokens sender))) tx-sender sender))
+    )
 )
 
 ;; @dev This function can only be run by the project creator to claim their first milestone after
@@ -173,13 +174,22 @@
                     {submitted: false, votes: u0, approved: false, claimed: false, finishedMilestone:""} 
                     (map-get? milestones index)
                 ) 
-                {votes: (+ u1 (get votes (map-get? milestones index)))}
+                {votes: (+ u1 (default-to u0 (get votes (map-get? milestones index))))}
             )
         )
-        (if (> (map-get? milestones index) (/ (var-get total-tokens) 2))
-            (map-insert milestones index (merge (map-get? milestones index) {approved: true}))
+        (if (> (default-to u0 (get votes (map-get? milestones index))) (/ (var-get total-tokens) u2))
+            (ok (map-insert milestones 
+                index 
+                (merge 
+                    (default-to 
+                        {submitted: false, votes: u0, approved: false, claimed: false, finishedMilestone:""} 
+                        (map-get? milestones index)
+                    )  
+                    {approved: true}
+                )
+            ))
+            (ok true)
         )
-        (ok true)
     )
 )
 
@@ -241,33 +251,9 @@
 )
 
 
-(define-read-only (read-claimed-first)
-    (var-get claimed-first)
-)
-
 
 (define-read-only (read-owner)
     (var-get owner)
-)
-
-
-(define-read-only (get-milestone-details (milestone uint)) 
-    (map-get? milestone-details milestone)
-)
-
-
-(define-read-only (read-current-milestone)
-    (var-get current-milestone)
-)
-
-
-(define-read-only (has-milestone-been-submitted (milestone uint))
-    (default-to false (map-get? has-submitted-milestone milestone))
-)
-
-
-(define-read-only (get-milestone-votes (milestone uint))
-    (default-to u0 (map-get? milestone-votes milestone))
 )
 
 
