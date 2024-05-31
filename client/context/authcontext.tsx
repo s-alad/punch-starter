@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { createContext, useContext } from "react";
 import { CVAR } from "@/utils/constant";
-
+/* import { getFullnodeUrl, SuiClient } from '@mysten/sui/client'; */
 import {
     openContractDeploy, SignatureData, SignatureRequestOptions,
     AppConfig, openSignatureRequestPopup, showConnect, UserSession
@@ -172,6 +172,17 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             userSession,
         });
     }
+
+ /*    const suiClient = new SuiClient("https://gateway.devnet.sui.io:443"); */
+    async function suiConnect() {
+/*         try {
+            const res = await suiClient.connect();
+            console.log("Sui Connected", res);
+        } catch (error) {
+            console.error("Error connecting to Sui:", error);
+        } */
+    }
+    
 
     async function connect(provider: Providers) {
         switch (provider) {

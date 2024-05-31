@@ -10,7 +10,8 @@ import ImageInput from "@/components/image/image";
 import supabase from "@/utils/supabase";
 import Button from "@/components/button/button";
 import { useWallets } from "@/context/walletcontext";
-
+import { ConnectButton } from "@suiet/wallet-kit";
+import "@suiet/wallet-kit/style.css";
 export default function Onboarding() {
     const { connect, puncher, askToRefresh } = useAuth()
     const { stacksconnect, wallets } = useWallets()
@@ -108,9 +109,28 @@ export default function Onboarding() {
                             <div>Stacks</div>
                         </div>
 
-                        <div className={s.wallet} onClick={stacksconnect}>
+                        <div className={s.wallet}
+                            style={{
+                                position: "relative",
+                            }}
+                        >
                             <img src='https://cryptologos.cc/logos/sui-sui-logo.png' />
                             <div>sui</div>
+                            <ConnectButton
+                            style={{
+                                position: "absolute",
+                                bottom: "0",
+                                left: "0",
+                                width: "100%",
+                                height: "100%",
+                                padding: "6px",
+                                borderRadius: "10px",
+                                backgroundColor: "transparent",
+                                color: "#000",
+                                border: "1px solid #000",
+                                fontWeight: "normal",
+                            }}
+                        />
                         </div>
 
                         <Button text="continue" onClick={proceed} loading={loading} />

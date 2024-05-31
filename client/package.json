@@ -14,6 +14,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@hookform/resolvers": "^3.4.2",
+    "@mysten/sui": "^1.0.3",
     "@mysten/sui.js": "^0.54.1",
     "@radix-ui/themes": "^3.0.5",
     "@rainbow-me/rainbowkit": "^2.1.1",
