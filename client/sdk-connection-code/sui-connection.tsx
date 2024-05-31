@@ -1,7 +1,7 @@
 import { ConnectButton, WalletProvider, useWallet } from "@suiet/wallet-kit";
 import { SuiAdapter } from "./SuiAdapter";
 
-export const SuiWalletConnect = () => {
+export const SomeRandomWalletConnect = () => {
   const wallet = useWallet();
 
   return (

@@ -1,6 +1,7 @@
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { WalletContextState, useWallet } from "@suiet/wallet-kit";
 import { ConnectionAdapter } from "./ConnectionAdapter";
+import { ConnectButton, useCurrentAccount } from '@mysten/dapp-kit';
 
 export class SuiAdapter extends ConnectionAdapter {
 
@@ -10,7 +11,7 @@ export class SuiAdapter extends ConnectionAdapter {
     
     constructor(wallet: WalletContextState) {
         super()
-        this.wallet = wallet
+        this.wallet = wallet;
     }
 
     public createProject(): Promise<void> {
@@ -21,13 +22,15 @@ export class SuiAdapter extends ConnectionAdapter {
             }
             try {
                 const tx = new TransactionBlock();
-                tx.moveCall({
+                let [result] = tx.moveCall({
                     target: `${this.packageObjectId}::${this.moduleName}::create_project`,
                     arguments: [],
                 });
+                tx.transferObjects([result], this.wallet.address!!)
                 const resData = this.wallet.signAndExecuteTransactionBlock({
                     transactionBlock: tx
-                });
+                })
+                
 
                 resolve()
             } catch (error) {

@@ -19,6 +19,7 @@ import {
 import { WagmiProvider } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, base } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { SomeRandomWalletConnect } from "@/sdk-connection-code/sui-connection";
 
 // Config RainbowKit
 const config = getDefaultConfig({
@@ -76,6 +77,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 >
                   <Layout>
                     <Component {...pageProps} />
+                    <SomeRandomWalletConnect />
                   </Layout>
                 </RainbowKitProvider>
               </QueryClientProvider>
