@@ -1,11 +1,17 @@
 import { TransactionBlock } from "@mysten/sui.js/transactions";
-import { useWallet } from "@suiet/wallet-kit";
+import { WalletContextState, useWallet } from "@suiet/wallet-kit";
+import { ConnectionAdapter } from "./ConnectionAdapter";
 
 export class SuiAdapter extends ConnectionAdapter {
 
     packageObjectId = "0xd32d8b0620fec07205bc62ff76bea0b3b4af372c7b3ef002065517df878ab075"
     moduleName = "sui_crowdfund"
-    wallet = useWallet();
+    wallet: WalletContextState
+    
+    constructor(wallet: WalletContextState) {
+        super()
+        this.wallet = wallet
+    }
 
     public createProject(): Promise<void> {
         return new Promise((resolve, reject) => {

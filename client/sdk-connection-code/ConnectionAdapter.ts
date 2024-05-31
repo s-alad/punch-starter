@@ -1,5 +1,3 @@
-import { SuiAdapter } from "./SuiAdapter";
-
 export abstract class ConnectionAdapter {
 
     /**
@@ -39,21 +37,4 @@ export abstract class ConnectionAdapter {
      * Used by funders to get their refund after a milestone has been frozen.
      */
     public abstract getRefund(): Promise<void>;
-
-    /**
-     * Enum for all adapter types
-     */
-    public static AdapterType = {
-        SUI: "SUI",
-        STACKS: "STACKS",
-    }
-
-    static createConnectionAdapter(adapterType: string): ConnectionAdapter {
-        switch (adapterType) {
-            case ConnectionAdapter.AdapterType.SUI:
-                return new SuiAdapter();
-            default:
-                throw new Error("Invalid adapter type");
-        }
-    }
 }
