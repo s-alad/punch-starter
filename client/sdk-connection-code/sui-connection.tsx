@@ -52,7 +52,7 @@ export const SuiWalletConnect = () => {
   // launch a move call for the connected account via wallet
   async function handleSignMessage() {
     await wallet.signPersonalMessage({
-      message: new TextEncoder().encode("Welcome to Touched!"),
+      message: new TextEncoder().encode("Welcome to Punch Starter!"),
     });
   }
 

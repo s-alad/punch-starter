@@ -64,7 +64,7 @@ export default function Onboarding() {
 
     return (
         <main className={s.onboarding}>
-            <h1>Welcome to Touched!</h1>
+            <h1>Welcome to Punch Starter!</h1>
             <p>we need some information to get you started</p>
             {
                 part === "info" && (
