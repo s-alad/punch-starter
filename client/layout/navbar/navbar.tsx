@@ -22,7 +22,8 @@ export default function Navbar() {
   const [search, setSearch] = useState("");
 
   const theme = useTheme();
-  const accentColor = theme.colors.accent;
+
+  const accentColor = useColorModeValue("#e03a44", "#e03a44");
   const inputBgColor = useColorModeValue("black", "black");
   const textColor = useColorModeValue("white", "white");
 
