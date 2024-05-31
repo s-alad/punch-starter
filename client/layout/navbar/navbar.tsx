@@ -1,20 +1,22 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { useAuth } from "@/context/authcontext";
-import { SearchIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
+  Flex,
   Image,
-  InputLeftAddon,
   Input,
   InputGroup,
+  InputLeftAddon,
+  useBreakpointValue,
   useColorModeValue,
   useTheme,
-  Flex,
-  useBreakpointValue,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import React from "react";
+import { SearchIcon } from "@chakra-ui/icons";
+import { useAuth } from "@/context/authcontext";
+import { useRouter } from "next/router";
 
 export default function Navbar() {
   const router = useRouter();
@@ -110,7 +112,10 @@ export default function Navbar() {
         </Box>
 
         <Box display={{ base: "none", md: "block" }} ml={{ md: "auto" }}>
-          <ConnectButton />
+          <Flex>
+            <Button style={{marginRight: 20}} onClick={() => router.push("/import")}>New Project</Button>
+            <ConnectButton />
+          </Flex>
         </Box>
       </Flex>
     </Box>

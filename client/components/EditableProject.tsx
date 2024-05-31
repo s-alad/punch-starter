@@ -115,6 +115,7 @@ export function EditableProjectUI(inputProject: any) {
               </FormControl>
             </Box>
           ))}
+          <Button onClick={() => alert(JSON.stringify(project))}>Submit Project!</Button>
       </VStack>
     </Box>
   );
