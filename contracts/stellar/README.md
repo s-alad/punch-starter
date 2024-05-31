@@ -31,17 +31,35 @@ soroban contract install \
 
 
 soroban contract deploy \
-  --wasm-hash 90b6a1912fa831e8b8010bf5fac5b4bedb3524b02791cb314fab5a08669fd03f \
+  --wasm-hash 0c21aa5a958604153e8745a58e437af37efb7a51ff5a46268f1560b443727208 \
   --source alice \
   --network testnet
 
 
 soroban contract invoke \
-  --id CB6L3E2DDRSBNOPBGE243UJSAPXSOK3ESP2CA4DJ2BEPEFWNCXQWTQFA \
+  --id CCQRTXDGPWLFVGCMQH72EOZB5BRL3SOEDPRT7MDUIZY5D2D2ISGNMF44 \
   --source alice \
   --network testnet \
   -- \
-  increment
+  create_project \
+  --owner GBTOUSH4LUEV7SPKNLXTUIMCE6ACNHB7LFP3JSZZKIELSMNSRBKQCX2E \
+  --goal 1234
+
+soroban contract invoke \
+  --id CCQRTXDGPWLFVGCMQH72EOZB5BRL3SOEDPRT7MDUIZY5D2D2ISGNMF44 \
+  --source alice \
+  --network testnet \
+  -- \
+  get_project
+
+soroban contract invoke \
+  --id CCQRTXDGPWLFVGCMQH72EOZB5BRL3SOEDPRT7MDUIZY5D2D2ISGNMF44 \
+  --source alice \
+  --network testnet \
+  -- \
+  add_fund \
+  --funder GBTOUSH4LUEV7SPKNLXTUIMCE6ACNHB7LFP3JSZZKIELSMNSRBKQCX2E \
+  --amount 100
 
 Working hello contract:
 
