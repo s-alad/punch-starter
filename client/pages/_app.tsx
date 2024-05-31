@@ -8,10 +8,8 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
 const ACCENT_COLOR = "#e03a44";
 
-//import rainbowkit
-
+// Import RainbowKit
 import "@rainbow-me/rainbowkit/styles.css";
-
 import {
   getDefaultConfig,
   RainbowKitProvider,
@@ -21,7 +19,7 @@ import { WagmiProvider } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, base } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
-// config rainbowkit
+// Config RainbowKit
 const config = getDefaultConfig({
   appName: "Punchstarter",
   projectId: "43a20e9b2e7ecab22145e7b0825a70e4",
@@ -33,10 +31,21 @@ const colors = {
   accent: ACCENT_COLOR,
 };
 
+// Extend the theme to set default text color to white
+const theme = extendTheme({
+  colors,
+  styles: {
+    global: {
+      body: {
+        color: "white",
+        bg: "gray.800", // You can also set a background color if needed
+      },
+    },
+  },
+});
+
 const queryClient = new QueryClient();
 
-// Extend the theme
-const theme = extendTheme({ colors });
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>

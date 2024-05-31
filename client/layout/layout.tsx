@@ -9,9 +9,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <Box maxWidth={"1000px"} margin="auto">
         <Navbar />
         <Divider />
+
         <div style={{ display: "flex", width: "100%", height: "100%" }}>
-          {/* <Sidebar />
-        {children} */}
+          <Sidebar />
+          {children}
         </div>
       </Box>
     </Box>
