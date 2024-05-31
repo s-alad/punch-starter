@@ -1,0 +1,33 @@
+@use "../styles/background.scss" as bg;
+@use "../styles/common.scss" as c;
+@use "../styles/palette.scss" as p;
+
+.main {
+
+    display: flex;
+    flex: 1;
+    @include bg.background();
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 2rem 3rem;
+    font-family: "Nunito", sans-serif;
+    color: black;
+    padding-bottom: 150px;
+
+    .left {
+        flex: 1;
+        width: 49%;
+    }   
+    .right {
+        flex: 1;
+        width: 49%;
+        /* border: 1px solid black; */
+        h1 {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+    }
+
+}

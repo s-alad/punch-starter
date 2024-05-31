@@ -1,0 +1,62 @@
+@use "../../styles/palette.scss" as p;
+@use "../../styles/common.scss" as c;
+
+.onboarding {
+    display: flex;
+    flex-direction: column;
+    padding: 3rem;
+    height: 100%;
+
+    .identifier {
+        display: flex;
+        flex-direction: column;
+
+        span {
+            margin-bottom: 6px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .address {
+            width: 300px;
+            word-break: break-all;
+            height: min-content;
+        }
+    }
+    
+    form, .wallets {
+        margin-top: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 300px;
+
+        .submit {
+            width: 100%;    
+            padding: 6px;
+            border: 2px solid #000;
+            border-radius: 10px;
+            background-color: #000;
+            color: #fff;
+            cursor: pointer;
+        }
+    }
+
+    .wallets {
+        .wallet {
+            img {
+                width: 40px;
+                height: 40px;
+                border-radius: 100%;
+                object-fit: cover;
+            }
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 6px;
+            border: 2px solid #000;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    }
+}

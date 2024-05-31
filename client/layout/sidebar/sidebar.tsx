@@ -3,78 +3,73 @@
 import React from "react";
 import { FaHome } from "react-icons/fa";
 import { MdOutlineExplore } from "react-icons/md";
-import { Box, Divider, Heading } from "@chakra-ui/react";
-import SidebarButton from "@/components/SidebarButton"; // Import the new SidebarButton component
+import s from "./sidebar.module.scss"
+import { useRouter } from "next/router";
+import { useAuth } from "@/context/authcontext";
+import Link from "next/link";
+import { GoProjectRoadmap } from "react-icons/go";
 
-interface NavItem {
-  name: string;
-  href: string;
-  icon: string | React.ReactElement;
+export default function Sidebar() {
+    const router = useRouter();
+    const { connect } = useAuth()
+
+    const feed = [
+        {
+            name: "Home",
+            href: "/",
+            icon: FaHome,
+        },
+        {
+            name: "Explore",
+            href: "/explore",
+            icon: MdOutlineExplore
+        },
+    ]
+    const subchains = [
+        {
+            name: "Stacks",
+            href: "/c/stacks",
+            icon: 'https://cryptologos.cc/logos/stacks-stx-logo.png',
+        },
+        {
+            name: "Stellar",
+            href: "/c/stellar",
+            icon: 'https://static-00.iconduck.com/assets.00/stellar-cryptocurrency-icon-512x508-6qztyo0f.png',
+        },
+        {
+            name: "Sui",
+            href: "/c/sui",
+            icon: "https://cryptologos.cc/logos/sui-sui-logo.png"
+        },
+        {
+            name: "Rootstock",
+            href: "/c/rootstock",
+            icon: "https://asset.brandfetch.io/idlHNCkrJa/idvZdDhAxY.jpeg"
+        }
+    ]
+    
+    return (
+        <nav className={s.nav}>
+            {
+                feed.map((feed, index) => (
+                    <Link key={index} href={feed.href}>
+                        { <feed.icon />}
+                        <div>{feed.name}</div>
+                    </Link>))
+            }
+            <div className={s.divider}></div>
+            <Link href="/projects">
+                <GoProjectRoadmap />
+                <div>My Projects</div>
+            </Link>
+            <div className={s.divider}></div>
+            {
+                subchains.map((subchain, index) => (
+                    <Link key={index} href={subchain.href}>
+                        { <img src={subchain.icon} alt="icon" />}
+                        <div>{subchain.name}</div>
+                    </Link>))
+            }
+        </nav>
+    )
 }
-
-const feed: NavItem[] = [
-  {
-    name: "Home",
-    href: "/",
-    icon: <FaHome size={"20px"} />,
-  },
-  {
-    name: "Explore",
-    href: "/explore",
-    icon: <MdOutlineExplore size={"20px"} />,
-  },
-];
-
-const subchains: NavItem[] = [
-  {
-    name: "Stacks",
-    href: "/c/stacks",
-    icon: "https://cryptologos.cc/logos/stacks-stx-logo.png",
-  },
-  {
-    name: "Stellar",
-    href: "/c/stellar",
-    icon: "https://static-00.iconduck.com/assets.00/stellar-cryptocurrency-icon-512x508-6qztyo0f.png",
-  },
-  {
-    name: "Sui",
-    href: "/c/sui",
-    icon: "https://cryptologos.cc/logos/sui-sui-logo.png",
-  },
-  {
-    name: "Rootstock",
-    href: "/c/rootstock",
-    icon: "https://asset.brandfetch.io/idlHNCkrJa/idvZdDhAxY.jpeg"
-  },
-];
-
-const Sidebar: React.FC = () => {
-  return (
-    <Box
-      borderRight="1px"
-      borderColor="#888b90"
-      width={{ base: "80%", md: "20%" }}
-    >
-      <Box height="10px" /> {/* Spacer */}
-      <Heading size={"sm"} fontWeight={"400"} color={"#d3d3d3"} ml={4} mb={1}>
-        Feeds
-      </Heading>
-      <Box>
-        {feed.map((item, index) => (
-          <SidebarButton key={index} item={item} />
-        ))}
-      </Box>
-      <Divider my={4} /> {/* Chakra Divider */}
-      <Heading size={"sm"} fontWeight={"400"} color={"#d3d3d3"} ml={4} mb={1}>
-        Platforms
-      </Heading>
-      <Box>
-        {subchains.map((item, index) => (
-          <SidebarButton key={index} item={item} />
-        ))}
-      </Box>
-    </Box>
-  );
-};
-
-export default Sidebar;

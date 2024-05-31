@@ -1,0 +1,21 @@
+@use "../../styles/background.scss" as bg;
+@use "../../styles/common.scss" as c;
+@use "../../styles/palette.scss" as p;
+
+.profile {
+    display: flex;
+    padding: 2rem 3rem;
+    flex-direction: column;
+    gap: 20px;
+    .username {
+    }
+    button {
+        background-color: p.$orange;
+        width: min-content;
+        padding: 1rem 3rem;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        width: 400px;
+    }
+}

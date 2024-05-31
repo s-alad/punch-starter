@@ -1,5 +1,11 @@
 import { Box, Heading } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { FaSearch, FaUser, FaHome, FaRegUserCircle } from "react-icons/fa";
+import { FaArrowUp } from "react-icons/fa6";
+import s from "./top.module.scss"
+import supabase from "@/utils/supabase";
+import Project from "@/models/project";
+import { useRouter } from "next/router";
 
 import { ChatUI } from "@/pages/chat";
 import Post from "@/components/Post";
@@ -8,40 +14,92 @@ import { projectList } from "@/utils/constant";
 
 // find top post and display as card
 export default function Top() {
-  const [project, setProject] = useState(null);
-  const [creator, setCreator] = useState(null);
-  const chat = ChatUI(project, creator);
-  return (
-    <Box alignItems={"center"} display={"flex"} flexDirection={"column"}>
-      <Heading mb="7px" size="sm" fontWeight={"400"} textColor={"#d3d3d3"}>
-        Punchstarter Featured
-      </Heading>
-      {project && creator && chat}
-      <Box maxW={"500px"} height={"500px"}>
-        {projectList &&
-          projectList.map((elem, index) => {
-            const project = elem.project;
-            const creator = elem.creator;
-            return (
-              <div onClick={() => {
-                setProject(project);
-                setCreator(creator);
-              }}>
-                <Post
-                  projectName={project.projectname}
-                  author={creator.name}
-                  description={project.projectdescription}
-                  image={
-                    project.projectimageurl ||
-                    "https://picsum.photos/seed/picsum/800/500?random=" + index
-                  }
-                  upvoteCount={69}
-                  onUpvote={() => console.log("rahhhh")}
-                ></Post>
-              </div>
-            );
-          })}
-      </Box>
-    </Box>
-  );
+
+    const router = useRouter();
+
+    const [project, setProject] = useState<Project>();
+
+    async function top() {
+        // query the project with the longest length of the upvotes column
+        // also get the owner of the project
+        const { data, error } = await supabase
+            .from('projects')
+            .select(`*, owner!inner(username)`)
+            .order('upvotes', { ascending: false })
+            .limit(1)
+
+        const p = data![0];
+
+        if (!p) {
+            setProject(undefined)
+            return
+        }
+
+        const project: Project = {
+            pid: p.pid,
+            name: p.name,
+            chain: p.chain,
+            display: p.display,
+            owner: {
+                username: p.owner.username,
+                uid: p.owner.uid,
+            },
+            punchline: p.punchline,
+            description: p.description,
+            deployed: p.deployed,
+            goal: p.goal,
+            raised: p.raised,
+            expiry: p.expiry,
+            upvotes: p.upvotes,
+            comments: p.comments,
+        }
+
+        setProject(project)
+    }
+
+    useEffect(() => {
+        top()
+    }, [])
+
+    return (
+        <div className={s.top}>
+            <h2>Most Punched Today!</h2>
+            {
+                project ?
+                    <div className={s.card}
+                        onClick={() => {
+                            router.push(`/projects/${project?.pid}`)
+                        }}
+                    >
+                        <img src={project?.display} />
+                        <div className={s.progress}>
+                            <span></span>
+                        </div>
+                        <div className={s.info}>
+                            <div className={s.left}>
+                                <FaRegUserCircle />
+                                <div className={s.updoots}>
+                                    <FaArrowUp />
+                                    <div className={s.doots}>{project?.upvotes}</div>
+                                </div>
+                            </div>
+                            <div className={s.right}>
+                                <h3>{project?.name}</h3>
+                                <h4>{project?.owner.username}</h4>
+                                <p className={s.punchline}>
+                                    {project?.punchline}
+                                </p>
+                                <p className={s.description}>
+                                    {project?.description}
+                                </p>
+                                <i>
+                                    {project?.comments?.length || 0} comments
+                                </i>
+                            </div>
+                        </div>
+                    </div> : "..."
+            }
+
+        </div>
+    )
 }

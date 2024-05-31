@@ -1,0 +1,1 @@
+export type CHAINS = "stacks" | "sui" | "stellar" | "rootstock";

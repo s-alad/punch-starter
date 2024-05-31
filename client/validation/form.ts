@@ -1,6 +1,5 @@
+import Milestone from "@/models/milestone";
 import { Control, FieldError, FieldValues, Path, UseFormRegister } from "react-hook-form";
-import { Age, Gender, Residence, PGender, College, Year } from "./models";
-
 
 export type DefaultFormField = {
     type: string;
@@ -15,29 +14,25 @@ export type DefaultFormField = {
 };
 
 export type OnboardingFormData = {
-    firstname: string;
-    age: number;
-    gender: Gender;
+    username: string;
+    avatar?: File;
 };
 
-export type DetailsFormData = {
-    residence: Residence;
-    college: College;
-    year: Year;
-};
+export type StartProjectFormData = {
+    projectname: string;
+    chain: "stacks" | "sui" | "stellar" | "rootstock";
+}
 
-export type PreferencesFormData = {
-    p_gender: PGender;
-    p_age: Age[];
-};
-
-export type PhotosFormData = {
-    p1: File;
-    p2: File;
-    p3?: File;
-    p4?: File;
-    p5?: File;
-    p6?: File;
+export type CreateProjectFormData = {
+    punchline: string;
+    description: string;
+    /* markdown: string; */
+    display: File;
+    /* images: File[]; */
+    /* tags: string[]; */
+    expiry: string;
+    goal: number;
+    milestones: Milestone[];
 };
 
 export interface GenericFormField<T extends FieldValues> extends DefaultFormField{
@@ -47,6 +42,3 @@ export interface GenericFormField<T extends FieldValues> extends DefaultFormFiel
     customregistername?: Path<string>;
     options?: string[] | number[];
 }
-
-interface PhotosFormGenericField extends GenericFormField<PhotosFormData> {}
-

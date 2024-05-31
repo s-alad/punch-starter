@@ -1,0 +1,14 @@
+.children {
+    width: calc(100% - 300px);
+    overflow-y: scroll;
+    display: flex;
+    flex: 1;
+    min-height: 100%;
+    flex-direction: column;
+    position: relative;
+    background-color: #f2f0ed;
+}
+.layout {
+    overflow-y: hidden;
+    height: 100%;
+}

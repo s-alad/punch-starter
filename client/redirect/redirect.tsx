@@ -10,6 +10,8 @@ import { useAuth } from "@/context/authcontext";
 const protectedRoutes = [
     "/profile",
     "/onboarding",
+    "/connect",
+
 ];
 
 export default function RedirectBasedOnAuth({ children }: { children: React.ReactNode }) {
@@ -17,7 +19,7 @@ export default function RedirectBasedOnAuth({ children }: { children: React.Reac
      * This is a higher level component who's job it is to redirect the user to the home page if they are not authenticated but attempt to navigate to a protected route.
      */
 
-    const { user, loading, raiser } = useAuth();
+    const { loading, puncher, session } = useAuth();
 
     const [calledPush, setCalledPush] = useState(false);
     const router = useRouter();
@@ -25,25 +27,24 @@ export default function RedirectBasedOnAuth({ children }: { children: React.Reac
 
     useEffect(() => {
 
-        /* console.log("REDI SIGN", user?.isUserSignedIn()); */
-
         if (loading) {
             return;
-        } else {}
+        }
 
         if (protectedRoutes.includes(currentRoute)) {
-            if ((!user && !calledPush)) {
+            console.log("current route is protected");
+            if ((!session && !calledPush)) {
                 setCalledPush(true);
                 router.push("/");
                 return;
             }
 
-            if (raiser && !raiser.onboarded && currentRoute !== "/onboarding") {
+            if (puncher && !puncher.onboarded && currentRoute !== "/onboarding") {
                 console.log("pushing to onboarding");
                 setCalledPush(true);
                 router.push("/onboarding");
                 return;
-            } else if (raiser && raiser.onboarded && currentRoute === "/onboarding") {
+            } else if (puncher && puncher.onboarded && currentRoute === "/onboarding") {
                 console.log("pushing to /");
                 setCalledPush(true);
                 router.push("/");
@@ -54,8 +55,8 @@ export default function RedirectBasedOnAuth({ children }: { children: React.Reac
         } else if (currentRoute === "/") {
             console.log("current route is /");
 
-            if (user) {
-                if (raiser && !raiser.onboarded) {
+            if (session) {
+                if (puncher && !puncher.onboarded) {
                     console.log("pushing to onboarding");
                     setCalledPush(true);
                     router.push("/onboarding");
@@ -65,7 +66,7 @@ export default function RedirectBasedOnAuth({ children }: { children: React.Reac
 
         }
 
-    }, [calledPush, currentRoute, router, raiser, user, loading]);
+    }, [calledPush, currentRoute, router, puncher, session, loading]);
 
     return children;
 };
