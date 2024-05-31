@@ -6,16 +6,17 @@
 (define-constant ERR-ALREADY-VOTED (err u105))
 (define-constant ERR-CONTRACT-FROZEN (err u106))
 (define-constant ERR-OUT-OF-RANGE (err u107))
+(define-constant ERR-ALREADY-CONFIRMED (err 108))
 
 ;; global variables
 (define-data-var funding-goal uint u0)
 (define-data-var end-block uint u0)
 (define-map milestones uint {
-    milestoneDescription: string-ascii, 
+    submitted: bool,
     votes: uint, 
     approved: bool, 
     claimed: bool, 
-    finishedMilestone: string-ascii
+    finishedMilestone: (string-ascii 36)
 })
 (define-map donator-stx-tokens principal uint)
 (define-data-var num-donators uint u0)
@@ -65,6 +66,7 @@
         (var-set funding-goal funding-goal_)
         (var-set end-block (+ block-height block-duration_))
         (var-set num-milestones num-milestones_)
+        (var-set milestones-unclaimed num-milestones_)
         (ok true)
     )
 )
@@ -115,54 +117,69 @@
 ;;      project is initially funded
 
 ;; change to claim-milestone and input an index
-(define-public (claim-milestone (uint index)) 
+(define-public (claim-milestone (index uint)) 
     (begin
         (asserts! (is-eq tx-sender (var-get owner)) ERR-ONLY-OWNER)
         (asserts! (is-eq (var-get funded) true) ERR-NOT-ENOUGH-FUNDS)
         (asserts! (<= index (var-get num-milestones)) ERR-OUT-OF-RANGE)
-        (asserts! (is-eq (get claimed (map-get? milestones index)) true) ERR-ALREADY-CLAIMED)
-        (map-insert milestones index (merge (map-get? milestones) {claimed: true}))
+        (asserts! (is-eq (default-to true (get claimed (map-get? milestones index))) true) ERR-ALREADY-CLAIMED)
+        (try! (as-contract (stx-transfer? (/ (stx-get-balance tx-sender) (var-get milestones-unclaimed)) tx-sender (var-get owner))))
+        (map-insert milestones index (merge (default-to {submitted: false, votes: u0, approved: false, claimed: false, finishedMilestone:""} (map-get? milestones index)) {claimed: true}))
         (var-set milestones-unclaimed (- u1 (var-get milestones-unclaimed)))
-        (as-contract (stx-transfer? (/ (stx-get-balance tx-sender) (var-get milestones-unclaimed)) tx-sender (var-get owner)))
+        (ok true)
     )
 )
+
 
 ;; @param string-ascii submission-details The link to the milestone details
 ;; @dev This function can only be run by the project creator to submit the details of 
 ;;      the active milestone
-(define-public (submit-milestone (submission-details (string-ascii 100)))
+(define-public (submit-milestone (submission-details (string-ascii 36)) (index uint))
     (begin 
+        (asserts! (<= index (var-get num-milestones)) ERR-OUT-OF-RANGE)
         (asserts! (is-eq tx-sender (var-get owner))  ERR-ONLY-OWNER)
-        (map-insert milestone-details (var-get current-milestone) {details:submission-details})
-        (map-insert has-submitted-milestone (var-get current-milestone) true)
+        (map-insert milestones 
+            index 
+            (merge 
+                (default-to 
+                    {submitted: false, votes: u0, approved: false, claimed: false, finishedMilestone:""} 
+                    (map-get? milestones index)
+                ) 
+                {submitted: true, finishedMilestone: submission-details}
+            )
+        )
         (ok true)
     )
 )
 
 ;; @dev This function votes yes on the current milestone. To vote no, don't vote
 
-(define-public (vote-on-milestone) 
+(define-public (vote-on-milestone (index uint)) 
     (begin  
-        (asserts! (default-to false (map-get? has-submitted-milestone (var-get current-milestone))) ERR-NO-ACTIVE-MILESTONE-SUBMISSIONS)
-        (asserts! (default-to true (map-get? has-voted-milestone {user:tx-sender, milestone:(var-get current-milestone)})) ERR-ALREADY-VOTED)
-        (map-insert milestone-votes (var-get current-milestone) 
-            (+ 
-                (default-to u0 (map-get? donator-stx-tokens tx-sender)) 
-                (default-to u0 (map-get? milestone-votes (var-get current-milestone)))
+        (asserts! (<= index (var-get num-milestones)) ERR-OUT-OF-RANGE)
+        (asserts! (default-to true (map-get? has-voted-milestone {user:tx-sender, milestone:index})) ERR-ALREADY-VOTED)
+        ;; (asserts! (> (get votes 
+        ;;                 (default-to 
+        ;;                     {submitted: false, votes: u0, approved: false, claimed: false, finishedMilestone:""} 
+        ;;                     (map-get? milestones index)
+        ;;                 )
+        ;;             )
+        ;;             (/ (var-get total-tokens) u2)
+        ;;         ) ERR-ALREADY-CONFIRMED)
+        (map-insert milestones 
+            index 
+            (merge 
+                (default-to 
+                    {submitted: false, votes: u0, approved: false, claimed: false, finishedMilestone:""} 
+                    (map-get? milestones index)
+                ) 
+                {votes: (+ u1 (get votes (map-get? milestones index)))}
             )
         )
-        (map-insert has-voted-milestone {user:tx-sender, milestone:(var-get current-milestone)} false)
-        (if (> (default-to u0 (map-get? milestone-votes (var-get current-milestone))) (/ (var-get total-tokens) u2)) 
-                (begin 
-                    (var-set current-milestone (+ u1 (var-get current-milestone)))
-                    (as-contract (stx-transfer? (/ (stx-get-balance tx-sender) (var-get num-milestones)) tx-sender (var-get owner)))
-                )
-                (ok (var-set current-milestone (var-get current-milestone)))
+        (if (> (map-get? milestones index) (/ (var-get total-tokens) 2))
+            (map-insert milestones index (merge (map-get? milestones index) {approved: true}))
         )
-
-        ;; Check if milestone has been submitted
-        ;; Check if milestone votes are above 50%
-        ;; 
+        (ok true)
     )
 )
 
