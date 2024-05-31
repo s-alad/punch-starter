@@ -22,7 +22,7 @@ export const SuiWalletConnect = () => {
         arguments: [tx.pure("Example NFT")],
       });
       await wallet.signAndExecuteTransactionBlock({
-        transactionBlock: tx,
+        transactionBlock: tx as any,
       });
     }
 
@@ -40,7 +40,7 @@ export const SuiWalletConnect = () => {
     try {
       // execute the programmable transaction
       const resData = await wallet.signAndExecuteTransactionBlock({
-        transactionBlock: tx
+        transactionBlock: tx as any,
       });
       console.log('nft minted successfully!', resData);
       alert('Congrats! your nft is minted!')
