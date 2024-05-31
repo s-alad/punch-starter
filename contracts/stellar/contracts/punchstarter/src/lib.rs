@@ -1,146 +1,66 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec, Address, Map};
+use soroban_sdk::{contract, contractimpl, log, symbol_short, Env, Symbol, Address, Vec, vec};
+
+const OWNER: Symbol = symbol_short!("OWNER");
+const FUND_AMT: Symbol = symbol_short!("FUND_AMT");
+const FUNDERS: Symbol = symbol_short!("FUNDERS");
+const TOT_FUNDS: Symbol = symbol_short!("TOT_FUNDS");
+const GOAL: Symbol = symbol_short!("GOAL");
+const FRZ_VOTE: Symbol = symbol_short!("FRZ_VOTE");
+const FRZ_VOTER: Symbol = symbol_short!("FRZ_VOTER");
+const FROZEN: Symbol = symbol_short!("FROZEN");
 
 #[contract]
 pub struct CrowdfundContract;
 
-#[derive(Debug)]
-pub struct Fund {
-    amount: u64,
-    funder: Address,
-}
-
-#[derive(Debug)]
-pub struct Milestone {
-    creator_already_took_funds: bool,
-    fund_goal: u64,
-    complete_votes: u64,
-    complete_voters: Vec<Address>,
-}
-
-#[derive(Debug)]
-pub struct Project {
-    owner: Address,
-    // funds: Vec<Fund>,
-    // milestones: Vec<Milestone>,
-    total_funds: u64,
-    fund_goal: u64,
-    freeze_votes: u64,
-    // freeze_voters: Vec<Address>,
-    frozen: bool,
-}
-
 #[contractimpl]
 impl CrowdfundContract {
-    // pub fn create_project(env: Env, owner: Address) -> Project {
-    //     Project {
-    //         owner,
-    //         funds: Vec::new(&env),
-    //         milestones: Vec::new(&env),
-    //         total_funds: 0,
-    //         fund_goal: 0,
-    //         freeze_votes: 0,
-    //         freeze_voters: Vec::new(&env),
-    //         frozen: false,
-    //     }
-    // }
+    pub fn create_project(env: Env, owner: Address, goal: u64) {
+        env.storage().instance().set(&OWNER, &owner);
+        env.storage().instance().set(&FUND_AMT, &Vec::<u64>::new(&env));
+        env.storage().instance().set(&FUNDERS, &Vec::<Address>::new(&env));
+        env.storage().instance().set(&TOT_FUNDS, &0u64);
+        env.storage().instance().set(&GOAL, &goal);
+        env.storage().instance().set(&FRZ_VOTE, &0u64);
+        env.storage().instance().set(&FRZ_VOTER, &Vec::<Address>::new(&env));
+        env.storage().instance().set(&FROZEN, &false);
 
-    // pub fn add_milestone(project: &mut Project, fund_goal: u64) {
-    //     assert!(!project.frozen, "Project is frozen");
+        log!(&env, "Project created with owner: {:?}, goal: {}", owner, goal);
+    }
 
-    //     project.milestones.push(Milestone {
-    //         creator_already_took_funds: false,
-    //         fund_goal,
-    //         complete_votes: 0,
-    //         complete_voters: Vec::new(&project.milestones.env()),
-    //     });
-    //     project.fund_goal += fund_goal;
-    // }
+    pub fn get_project(env: Env) {
+        let owner: Address = env.storage().instance().get(&OWNER).unwrap();
+        let fund_amt: Vec<u64> = env.storage().instance().get(&FUND_AMT).unwrap();
+        let funders: Vec<Address> = env.storage().instance().get(&FUNDERS).unwrap();
+        let tot_funds: u64 = env.storage().instance().get(&TOT_FUNDS).unwrap();
+        let goal: u64 = env.storage().instance().get(&GOAL).unwrap();
+        let frz_vote: u64 = env.storage().instance().get(&FRZ_VOTE).unwrap();
+        let frz_voter: Vec<Address> = env.storage().instance().get(&FRZ_VOTER).unwrap();
+        let frozen: bool = env.storage().instance().get(&FROZEN).unwrap();
 
-    // pub fn add_fund(project: &mut Project, amount: u64, funder: Address) {
-    //     assert!(!project.frozen, "Project is frozen");
+        log!(&env, "Owner: {:?}", owner);
+        log!(&env, "Fund Amounts: {:?}", fund_amt);
+        log!(&env, "Funders: {:?}", funders);
+        log!(&env, "Total Funds: {}", tot_funds);
+        log!(&env, "Goal: {}", goal);
+        log!(&env, "Freeze Votes: {}", frz_vote);
+        log!(&env, "Freeze Voters: {:?}", frz_voter);
+        log!(&env, "Frozen: {}", frozen);
+    }
 
-    //     project.total_funds += amount;
+    pub fn add_fund(env: Env, amount: u64, funder: Address) {
+        let mut fund_amt: Vec<u64> = env.storage().instance().get(&FUND_AMT).unwrap();
+        let mut funders: Vec<Address> = env.storage().instance().get(&FUNDERS).unwrap();
+        let mut tot_funds: u64 = env.storage().instance().get(&TOT_FUNDS).unwrap();
 
-    //     project.funds.push(Fund {
-    //         amount,
-    //         funder,
-    //     });
-    // }
+        fund_amt.append(&mut vec![&env, amount]);
+        funders.append(&mut vec![&env, funder.clone()]);
+        tot_funds += amount;
 
-    // pub fn vote_complete(project: &mut Project, milestone_index: usize, voter: Address) {
-    //     assert!(project.total_funds >= project.fund_goal, "Project is not fully funded");
-    //     assert!(!project.frozen, "Project is frozen");
-    //     assert!(milestone_index < project.milestones.len(), "Invalid milestone index");
+        env.storage().instance().set(&FUND_AMT, &fund_amt);
+        env.storage().instance().set(&FUNDERS, &funders);
+        env.storage().instance().set(&TOT_FUNDS, &tot_funds);
 
-    //     let milestone = &mut project.milestones[milestone_index];
-
-    //     assert!(
-    //         !milestone.complete_voters.contains(&voter),
-    //         "Voter has already voted"
-    //     );
-
-    //     let votes: u64 = project
-    //         .funds
-    //         .iter()
-    //         .filter(|fund| fund.funder == voter)
-    //         .map(|fund| fund.amount)
-    //         .sum();
-
-    //     milestone.complete_votes += votes;
-    //     milestone.complete_voters.push(voter);
-    // }
-
-    // pub fn redeem_milestone(project: &mut Project, milestone_index: usize, owner: Address) -> u64 {
-    //     assert!(project.owner == owner, "Only owner can redeem milestone");
-    //     assert!(milestone_index < project.milestones.len(), "Invalid milestone index");
-
-    //     let milestone = &mut project.milestones[milestone_index];
-    //     assert!(
-    //         milestone.complete_votes > project.fund_goal / 2,
-    //         "Not enough votes to complete milestone"
-    //     );
-    //     assert!(!milestone.creator_already_took_funds, "Funds already taken");
-
-    //     milestone.creator_already_took_funds = true;
-    //     project.fund_goal
-    // }
-
-    // pub fn vote_freeze(project: &mut Project, voter: Address) {
-    //     assert!(project.total_funds >= project.fund_goal, "Project is not fully funded");
-    //     assert!(!project.frozen, "Project is already frozen");
-
-    //     assert!(
-    //         !project.freeze_voters.contains(&voter),
-    //         "Voter has already voted to freeze"
-    //     );
-
-    //     let votes: u64 = project
-    //         .funds
-    //         .iter()
-    //         .filter(|fund| fund.funder == voter)
-    //         .map(|fund| fund.amount)
-    //         .sum();
-
-    //     project.freeze_votes += votes;
-    //     project.freeze_voters.push(voter);
-
-    //     if project.freeze_votes > project.total_funds * 3 / 4 {
-    //         project.frozen = true;
-    //     }
-    // }
-
-    // pub fn get_refund(project: &mut Project, funder: Address) -> u64 {
-    //     assert!(project.frozen, "Project is not frozen");
-
-    //     let refund: u64 = project
-    //         .funds
-    //         .iter()
-    //         .filter(|fund| fund.funder == funder)
-    //         .map(|fund| fund.amount)
-    //         .sum();
-
-    //     project.total_funds -= refund;
-    //     refund
-    // }
+        log!(&env, "Fund added by {:?} of amount: {}. Total funds: {}", funder, amount, tot_funds);
+    }
 }
