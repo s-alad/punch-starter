@@ -12,6 +12,8 @@
     "@radix-ui/themes": "^3.0.5",
     "@stacks/connect": "^7.7.1",
     "@stacks/connect-react": "^22.4.2",
+    "@supabase/ssr": "^0.3.0",
+    "@supabase/supabase-js": "^2.43.4",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",

@@ -4,6 +4,7 @@ import { FaHandPointer, FaSearch, FaUser } from "react-icons/fa";
 import s from "./navbar.module.scss"
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/authcontext";
+import Link from "next/link";
 
 export default function Navbar() {
     const router = useRouter();
@@ -41,10 +42,10 @@ export default function Navbar() {
                 ><FaSearch /></div>
             </div>
             <div className={s.actions}>
-                <div className={s.connect}>
+                <Link href={'/connect'} className={s.connect}>
                     <FaUser />
                     <div>{"connect"}</div>
-                </div>
+                </Link>
             </div>
         </nav>
     )

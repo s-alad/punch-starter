@@ -2,7 +2,6 @@ import Head from "next/head";
 import Image from "next/image";
 import s from "./index.module.scss";
 import Top from "@/components/top/top";
-import ConnectWallet, { DeployContract } from "@/sdk-connection-code/stacks-connection";
 export default function Home() {
   return (
     <>
@@ -18,8 +17,6 @@ export default function Home() {
         </div>
         <div className={s.right}>
           <h1>Rising Touchers!</h1>
-          <ConnectWallet />
-          <DeployContract />
         </div>
       </main>
     </>
