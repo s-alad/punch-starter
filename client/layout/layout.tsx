@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     {
       id: 1,
       projectName: "BeFit",
-      upvoteCount: 100,
+      upvoteCount: 0,
       thumbnailUrl:
         "https://chumley.barstoolsports.com/union/2024/04/19/zuck-beard.e8aec17b.jpeg?fit=bounds&format=pjpg&auto=webp&quality=85%2C75",
     },

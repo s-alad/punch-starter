@@ -159,6 +159,10 @@
                 )
                 (ok (var-set current-milestone (var-get current-milestone)))
         )
+
+        ;; Check if milestone has been submitted
+        ;; Check if milestone votes are above 50%
+        ;; 
     )
 )
 
