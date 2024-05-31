@@ -371,9 +371,7 @@ export default function Projects() {
         />
         <br />
         <br />
-        <Button onClick={handleFormPopulationSubmit}>
-          Generate Project Description
-        </Button>
+        <Button onClick={handleFormPopulationSubmit} text=" Generate Project Description" />
         {formLoading && (
           <img
             style={{ borderRadius: 50, marginTop: 30 }}
