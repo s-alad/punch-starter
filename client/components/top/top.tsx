@@ -14,10 +14,10 @@ export default function Top() {
 
       <Box maxW={"500px"} height={"500px"}>
         <Post
-          projectName="googly googly"
-          author="rfk"
-          description="googly boogly oogly loogly. googly boogly oogly loogly.googly boogly oogly loogly.googly boogly oogly loogly.googly boogly oogly loogly.googly boogly oogly loogly.googly boogly oogly loogly."
-          image="https://chumley.barstoolsports.com/union/2024/04/19/zuck-beard.e8aec17b.jpeg?fit=bounds&format=pjpg&auto=webp&quality=85%2C75"
+          projectName="BeFit"
+          author="Xavier D'Mello & William Wang"
+          description="BeFit revolutionizes fitness motivation by blending the spontaneity of BeReal with the accountability and rewards of exercising. At random times, BeFit prompts users to complete a specified exercise, using machine learning to verify completion via camera. Successfully performed exercises are rewarded with unique NFTs, creating a tangible record of achievements. Users can view friends' exercise accomplishments, fostering a community of support and motivation. "
+          image="/befit.jpeg"
           upvoteCount={69}
           onUpvote={() => console.log("rahhhh")}
         />
