@@ -27,6 +27,9 @@ const userSession = new UserSession({ appConfig });
 const mainnet = new StacksMainnet();
 const testnet = new StacksTestnet();
 
+const address = "";
+const contractName = "";
+
 function authenticate() {
   showConnect({
     appDetails: {
