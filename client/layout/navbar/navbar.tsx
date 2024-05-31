@@ -1,15 +1,4 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Image,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  useBreakpointValue,
-  useColorModeValue,
-  useTheme,
-} from "@chakra-ui/react";
+
 import { useEffect, useState } from "react";
 import { FaHandPointer, FaSearch, FaUser, FaPlus } from "react-icons/fa";
 import s from "./navbar.module.scss"
