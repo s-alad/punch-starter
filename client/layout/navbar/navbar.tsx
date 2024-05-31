@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/authcontext";
 import { SearchIcon } from "@chakra-ui/icons";
@@ -20,6 +20,7 @@ export default function Navbar() {
   const router = useRouter();
   const { user, raiser, connect } = useAuth();
   const [search, setSearch] = useState("");
+  const [currentChain, setCurrentChain] = useState("");
 
   const theme = useTheme();
 
@@ -31,6 +32,22 @@ export default function Navbar() {
     base: "/mobile-logo.png",
     md: "/logo.png",
   });
+
+  useEffect(() => {
+    const updateCurrentChain = () => {
+      if (router.pathname.includes("/stacks")) {
+        setCurrentChain("stacks");
+      } else if (router.pathname.includes("/stellar")) {
+        setCurrentChain("stellar");
+      } else if (router.pathname.includes("/sui")) {
+        setCurrentChain("sui");
+      } else {
+        setCurrentChain("rootstock");
+      }
+    };
+
+    updateCurrentChain();
+  }, [router.pathname]);
 
   async function lookup() {
     if (search) {
@@ -44,6 +61,7 @@ export default function Navbar() {
     }
   }
 
+  console.log(router.pathname);
   return (
     <Box p="15px" width="100%" bg="black">
       <Flex
