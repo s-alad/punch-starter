@@ -33,15 +33,13 @@ export function ChatUI(project: any, creator: any) {
   async function getProject() {
     setLoading(true);
     console.log("getting project");
+    if (!project || !creator) {
+      console.log("no project or creator");
+      return;
+    }
 
     const creatorString = JSON.stringify(creator).slice(0, 2000);
     const projectString = JSON.stringify(project).slice(0, 2000);
-    console.log(
-      creatorString,
-      projectString,
-      project["projectname"],
-      creator.name
-    );
     setMessages([
       ...messages,
       {

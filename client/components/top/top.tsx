@@ -23,9 +23,10 @@ export default function Top() {
             const project = elem.project;
             const creator = elem.creator;
             return (
-              <div onClick={() => {
+              <div style={{marginTop: 20}} onClick={() => {
                 setProject(project);
                 setCreator(creator);
+                
               }}>
                 <Post
                   projectName={project.projectname}
