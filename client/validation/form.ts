@@ -14,25 +14,25 @@ export type DefaultFormField = {
 };
 
 export type OnboardingFormData = {
-    username: string;
+    username?: string;
     avatar?: File;
 };
 
 export type StartProjectFormData = {
-    projectname: string;
-    chain: "stacks" | "sui" | "stellar" | "rootstock";
+    projectname?: string;
+    chain?: "stacks" | "sui" | "stellar" | "rootstock";
 }
 
 export type CreateProjectFormData = {
-    punchline: string;
-    description: string;
+    punchline?: string;
+    description?: string;
     /* markdown: string; */
-    display: File;
+    display?: File;
     /* images: File[]; */
     /* tags: string[]; */
-    expiry: string;
-    goal: number;
-    milestones: Milestone[];
+    expiry?: string;
+    goal?: number;
+    milestones?: Milestone[];
 };
 
 export interface GenericFormField<T extends FieldValues> extends DefaultFormField{
