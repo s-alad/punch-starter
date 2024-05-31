@@ -4,7 +4,8 @@ pragma solidity ^0.8.20;
 import {fundingDao} from "./fundingDao.sol";
 
 contract daoFactory {
-    mapping(address => dao) public userToAddress;
+    mapping(address => uint) public numberOfDaos;
+    mapping(address => mapping(uint => dao)) public userToAddress;
 
     struct dao {
         address dao;
@@ -35,7 +36,8 @@ contract daoFactory {
             _milestoneDescriptions
         );
 
-        userToAddress[msg.sender] = dao(address(temp), msg.sender, _uuid);
+        numberOfDaos[msg.sender] += 1;
+        userToAddress[msg.sender][numberOfDaos[msg.sender]] = dao(address(temp), msg.sender, _uuid);
 
         return address(temp);
     }
