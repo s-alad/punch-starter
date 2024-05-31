@@ -1,0 +1,70 @@
+@use "../../styles/background.scss" as bg;
+@use "../../styles/common.scss" as c;
+@use "../../styles/palette.scss" as p;
+
+
+
+.top {
+    h1 {
+        font-style: italic;
+        margin-bottom: 10px;
+    }
+    .punches {
+        display: grid;
+        // two columns, take up only one column max
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        width: 100%;
+        gap: 12px;
+
+        .card {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            background-color: p.$offwhite;
+            border-radius: 8px;
+            gap: 4px;
+    
+            img {
+                border-radius: 8px;
+                height: 200px;
+            }
+    
+            .progress {
+                margin: 12px 0px;
+                width: 100%;
+                border: 2px solid p.$orange;
+                border-radius: 4px;
+                padding: 4px;
+                height: 24px;
+    
+                span {
+                    display: block;
+                    height: 100%;
+                    background-color: p.$orange;
+                    border-radius: 4px;
+                    width: 72%;
+                }
+            }
+    
+            .info {
+                display: flex;
+                gap: 20px;
+                .left {
+                    font-size: 28px;
+                    width: 50px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 16px;
+                    .updoots {
+                        font-size: 18px;
+                        text-align: center;
+                    }
+    
+                }
+            }
+        }
+    }
+
+}

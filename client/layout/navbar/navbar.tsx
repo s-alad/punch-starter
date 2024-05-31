@@ -27,35 +27,37 @@ export default function Navbar() {
     return (
         <nav className={s.nav}>
             <div className={s.splash}>
-                <FaHandPointer />
-                <div>Touched</div>
+                <div>PUNCH STARTER</div>
             </div>
-            <div className={s.search}>
-                <input
-                    type="text"
-                    placeholder="Search for projects"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
-                <div className={s.magnify}
-                    onClick={lookup}
-                ><FaSearch /></div>
-            </div>
-            <div className={s.actions}>
-                <Link href={
-                    puncher ? "/punch" : '/connect'} className={s.connect}>
-                    <FaPlus />
-                    <div>
-                        create
-                    </div>
-                </Link>
-                <Link href={
-                    puncher ? "/profile" : '/connect'} className={s.connect}>
-                    <FaUser />
-                    <div>
-                        {puncher ? puncher.username : "Connect"}
-                    </div>
-                </Link>
+
+            <div className={s.right}>
+                <div className={s.search}>
+                    <div className={s.magnify}
+                        onClick={lookup}
+                    ><FaSearch /></div>
+                    <input
+                        type="text"
+                        placeholder="Search for projects"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                </div>
+                <div className={s.actions}>
+                    <Link href={
+                        puncher ? "/punch" : '/connect'} className={s.create}>
+                        <FaPlus />
+                        <div>
+                            create
+                        </div>
+                    </Link>
+                    <Link href={
+                        puncher ? "/profile" : '/connect'} className={s.connect}>
+                        <FaUser />
+                        <div>
+                            {puncher ? puncher.username : "Connect"}
+                        </div>
+                    </Link>
+                </div>
             </div>
         </nav>
     )

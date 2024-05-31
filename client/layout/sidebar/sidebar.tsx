@@ -6,6 +6,7 @@ import s from "./sidebar.module.scss"
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/authcontext";
 import Link from "next/link";
+import { GoProjectRoadmap } from "react-icons/go";
 
 export default function Sidebar() {
     const router = useRouter();
@@ -50,6 +51,11 @@ export default function Sidebar() {
                         <div>{feed.name}</div>
                     </Link>))
             }
+            <div className={s.divider}></div>
+            <Link href="/projects">
+                <GoProjectRoadmap />
+                <div>My Projects</div>
+            </Link>
             <div className={s.divider}></div>
             {
                 subchains.map((subchain, index) => (

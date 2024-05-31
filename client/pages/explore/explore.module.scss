@@ -1,0 +1,11 @@
+@use "../../styles/background.scss" as bg;
+@use "../../styles/common.scss" as c;
+@use "../../styles/palette.scss" as p;
+
+.explore {
+    display: flex;
+    padding: 2rem 3rem;
+    flex-direction: column;
+    gap: 20px;
+
+}

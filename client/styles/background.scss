@@ -1,7 +1,7 @@
 @use "./palette.scss" as p;
 
 @mixin background() {
-  /*   background: p.$offwhite; */
+    background: p.$offwhite;
 /*     background: linear-gradient(253deg, #662424, #d55858, #dd6666, #cb2d22, #912614);
     background-size: 400% 400%;
     color: #fff;

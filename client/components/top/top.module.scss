@@ -16,6 +16,7 @@
         background-color: p.$offwhite;
         border-radius: 8px;
         gap: 4px;
+        cursor: pointer;
 
         img {
             border-radius: 8px;
@@ -48,6 +49,25 @@
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
+                gap: 16px;
+                .updoots {
+                    font-size: 18px;
+                    text-align: center;
+                }
+
+            }
+            .right {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+                .punchline {
+                    //italic;
+                    font-style: italic;
+                }
+                i {
+                    margin-top: 4px;
+                    color: gray;
+                }
             }
         }
 

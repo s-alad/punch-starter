@@ -2,6 +2,8 @@ import Head from "next/head";
 import Image from "next/image";
 import s from "./index.module.scss";
 import Top from "@/components/top/top";
+import Rising from "@/components/rising/rising";
+
 export default function Home() {
   return (
     <>
@@ -16,7 +18,7 @@ export default function Home() {
           <Top />
         </div>
         <div className={s.right}>
-          <h1>Rising Touchers!</h1>
+          <Rising />
         </div>
       </main>
     </>

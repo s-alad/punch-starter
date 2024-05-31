@@ -20,6 +20,9 @@ import { StacksMainnet, StacksTestnet } from '@stacks/network';
 import { AnchorMode, PostConditionMode } from '@stacks/transactions';
 import supabase from "@/utils/supabase";
 import Milestone from "@/models/milestone";
+import { denomination } from "@/utils/denomination";
+import { FaArrowUp, FaUserCircle } from "react-icons/fa";
+import Comment from "@/models/comment";
 
 
 export default function Projects() {
@@ -29,7 +32,9 @@ export default function Projects() {
     const { session, puncher } = useAuth();
     const [project, setProject] = useState<Project>();
     const [milestones, setMilestones] = useState<Milestone[]>([]);
-    
+
+    let [comments, setComments] = useState<Comment[]>([]);
+    let [comment, setComment] = useState("");
     let [loading, setLoading] = useState(true);
     let [amount, setAmount] = useState(0);
     let [funding, setFunding] = useState(false);
@@ -37,24 +42,137 @@ export default function Projects() {
 
         if (!project) { return; }
 
-       /*  openSTXTransfer({
-            network: new StacksMainnet(), // which network to use; use `new StacksMainnet()` for mainnet
-            anchorMode: AnchorMode.Any, // which type of block the tx should be mined in
+        /*  openSTXTransfer({
+             network: new StacksMainnet(), // which network to use; use `new StacksMainnet()` for mainnet
+             anchorMode: AnchorMode.Any, // which type of block the tx should be mined in
+ 
+             recipient: project.ownerstacksaddress, // which address we are sending to
+             amount: (amount * 1000000).toString(), // amount to send in microstacks
+             memo: 'funding', // optional; a memo to help identify the tx
+ 
+             onFinish: async (response) => {
+                 // WHEN user confirms pop-up
+                 console.log(response.txId); // the response includes the txid of the transaction
+ 
+             },
+             onCancel: () => {
+                 // WHEN user cancels/closes pop-up
+                 console.log('User canceled');
+             },
+         }); */
+    }
 
-            recipient: project.ownerstacksaddress, // which address we are sending to
-            amount: (amount * 1000000).toString(), // amount to send in microstacks
-            memo: 'funding', // optional; a memo to help identify the tx
+    async function addUpvote() {
+        //first check that the user uuid is not in the upvoteslist column
+        //if it is not in the upvoteslist column, increment the upvotes column by 1
+        if (!project || !puncher) {
+            console.log('Project or user data is missing');
+            return;
+        }
 
-            onFinish: async (response) => {
-                // WHEN user confirms pop-up
-                console.log(response.txId); // the response includes the txid of the transaction
+        const { data: projectData, error: fetchError } = await supabase
+            .from('projects')
+            .select('upvoteslist, upvotes')
+            .eq('pid', project.pid)
+            .single();
 
-            },
-            onCancel: () => {
-                // WHEN user cancels/closes pop-up
-                console.log('User canceled');
-            },
-        }); */
+        if (fetchError) {
+            console.error('Error fetching project data:', fetchError);
+            return;
+        }
+
+        let uplist = projectData.upvoteslist || [];
+
+        if (uplist.includes(puncher.uid)) {
+            console.log('You have already upvoted this project');
+            return;
+        }
+
+        // Update the upvotes list and increment the upvotes count
+        const newUpvotesList = [...uplist, puncher.uid];
+        const newUpvotesCount = projectData.upvotes + 1;
+
+        const { error: updateError } = await supabase
+            .from('projects')
+            .update({
+                upvoteslist: newUpvotesList,
+                upvotes: newUpvotesCount
+            })
+            .eq('pid', project.pid);
+
+        if (updateError) {
+            console.error('Failed to update upvotes:', updateError);
+            return;
+        }
+
+        console.log('Project upvoted successfully');
+
+        // Update local state to reflect the new upvotes
+        setProject({
+            ...project,
+            upvotes: newUpvotesCount
+        });
+
+    }
+
+    async function getComments() {
+        setLoading(true);
+
+        supabase.
+            from('comments')
+            .select(`*, owner!inner(username, uid)`)
+            .eq('pid', pid)
+            .then(({ data: comments, error }) => {
+                if (error) {
+                    console.log(error)
+                    return
+                }
+                console.log(comments)
+
+                let comms: Comment[] = comments.map((comment: any) => {
+                    return {
+                        cid: comment.cid,
+                        comment: comment.comment,
+                        owner: {
+                            username: comment.owner.username,
+                            uid: comment.owner.uid,
+                        }
+                    }
+                })
+
+                setComments(comms);
+                setLoading(false)
+            })
+
+        setLoading(false);
+    }
+
+    async function addComment() {
+
+        if (!comment || !puncher) {
+            console.log('Comment or user data is missing');
+            return;
+        }
+
+        setLoading(true);
+
+        supabase.
+            from('comments')
+            .insert({
+                pid: pid,
+                owner: puncher?.uid,
+                comment: comment,
+            })
+            .then(({ data: comments, error }) => {
+                if (error) {
+                    console.log(error)
+                    return
+                }
+                console.log(comments)
+            })
+        setComment("");
+        getComments();
+        setLoading(false);
     }
 
     async function getProject() {
@@ -76,13 +194,18 @@ export default function Projects() {
                     name: projects[0].name,
                     chain: projects[0].chain,
                     display: projects[0].display,
-                    owner: projects[0].owner,
+                    owner: {
+                        username: projects[0].owner.username,
+                        uid: projects[0].owner.uid,
+                    },
                     punchline: projects[0].punchline,
                     description: projects[0].description,
                     deployed: projects[0].deployed,
                     goal: projects[0].goal,
                     raised: projects[0].raised,
                     expiry: projects[0].expiry,
+                    upvotes: projects[0].upvotes,
+                    upvoteslist: projects[0].upvoteslist,
                 }
                 setProject(proj);
             })
@@ -126,6 +249,7 @@ export default function Projects() {
         if (pid) {
             getProject();
             getMilestones();
+            getComments();
         }
     }, [puncher, pid])
 
@@ -144,75 +268,112 @@ export default function Projects() {
                         <div className={s.left}>
                             <div className={s.projectname}>{project.name}</div>
                             <div className={s.punchline}>{project.punchline}</div>
-                          {/*   <div className={s.creator}>stx.{project.ownerstacksaddress}</div> */}
+                            <div className={s.creator}>{project.owner.username}</div>
                         </div>
-                        {
-                            puncher && <div className={s.right}>
-                            {
-                                !funding ? <>
-                                    <button className={s.dao} onClick={() => router.push(`/projects/${project.pid}/dao`)}>
-                                        dao!
-                                    </button>
-                                    <button className={s.fund} onClick={()=> setFunding(true)}>fund!</button>
-                                </> : 
-                                <div className={s.funding}>
-                                    <input type="number" placeholder="amount" 
-                                        value={amount} 
-                                        onChange={(e) => setAmount(parseInt(e.target.value))}
-                                    />
-                                    <button
-                                        onClick={fund} 
-                                    >fund</button>
-                                </div>
-                            }
-                        </div>
-                        }
                     </div>
                     <div className={s.content}>
-                        <img src={project.display} alt={project.name} />
-                        <div className={s.details}>
-                            <div className={s.detail}>
-                                <label>description:</label>
-                                <p>{project.description}</p>
+                        <div className={s.left}>
+                            <img src={project.display} alt={project.name} />
+                            <div className={s.details}>
+                                <div className={s.detail}>
+                                    <p>{project.description}</p>
+                                </div>
+                                <div className={s.detail}>
+                                    <i>{project.expiry || 0} days left</i>
+                                </div>
                             </div>
                             <div className={s.detail}>
-                                <label>duration:</label>
-                                <p>{project.expiry}</p>
-                                {/* <p>ending in {getDaysUntilExpiry(project.expiry)} days from now</p> */}
-                            </div>
-                            <div className={s.detail}>
-                                <label>raised:</label>
                                 <div className={s.raised}>
                                     <div className={s.bar}>
                                         <div className={s.fill} style={{
-                                            width: project.raised === 0 ? "3%" : `${(project.raised / project.goal) * 100}%`
+                                            width: (project.raised || 0) === 0 ? "3%" : `${(project.raised / project.goal) * 100}%`
                                         }}>
                                         </div>
                                     </div>
-                                    <p>{project.raised} / {project.goal} STX</p>
+                                    <p>{project.raised || 0} / {project.goal} {denomination[project.chain]}</p>
+                                </div>
+                            </div>
+
+                            {
+                                puncher &&
+                                (
+                                    <>
+                                        {
+                                            !funding ?
+                                                <button className={s.fund} onClick={() => setFunding(true)}>fund!</button>
+                                                :
+                                                <div className={s.funding}>
+                                                    <input type="number" placeholder="amount"
+                                                        value={amount}
+                                                        onChange={(e) => setAmount(parseInt(e.target.value))}
+                                                    />
+                                                    <button
+                                                        onClick={fund}
+                                                    >fund</button>
+                                                </div>
+                                        }
+                                        <button className={s.dao} onClick={() => router.push(`/projects/${project.pid}/dao`)}>
+                                            dao!
+                                        </button>
+                                    </>
+                                )
+                            }
+                        </div>
+                        <div className={s.right}>
+                            <div className={s.milestones}>
+                                {
+                                    milestones.map((milestone, index) => {
+                                        return (
+                                            <div className={s.milestone} key={index}>
+                                                <div className={s.mile}>
+                                                    <div>milestone</div>
+                                                    <label>{index + 1}</label></div>
+                                                <div className={s.stone}>
+                                                    <div className={s.name}>{milestone.name}</div>
+                                                    <div className={s.desc}>{milestone.description}</div>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                            <div className={s.divider}></div>
+                            <div className={s.commentswrapper}>
+                                <div className={s.top}>
+                                    <div className={`${s.upvote} ${project.upvoteslist?.includes(puncher!.uid) ? s.upvoted : ""}`}
+                                        onClick={addUpvote}
+                                    >
+                                        <FaArrowUp />
+                                        <div className={s.doots}>{project?.upvotes}</div>
+                                    </div>
+                                    <input type="text" placeholder="comment"
+                                        value={comment}
+                                        onChange={(e) => setComment(e.target.value)}
+                                    />
+                                    <button
+                                        onClick={addComment}
+                                    >comment</button>
+                                </div>
+                                <div className={s.comments}>
+                                    {
+                                        comments.map((comment, index) => {
+                                            return (
+                                                <div key={index} className={s.comment}>
+                                                    <div className={s.left}>
+                                                        <FaUserCircle />
+                                                    </div>
+                                                    <div className={s.right}>
+                                                        <div className={s.username}>{comment.owner.username}</div>
+                                                        <div className={s.text}>{comment.comment}</div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        })
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className={s.milestones}>
-                        {
-                            milestones.map((milestone, index) => {
-                                return (
-                                    <div className={s.milestone} key={index}>
-                                        <div className={s.mile}>
-                                            <div>milestone</div>
-                                            <label>{index + 1}</label></div>
-                                        <div className={s.stone}>
-                                            <div className={s.name}>{milestone.name}</div>
-                                            <div className={s.desc}>{milestone.description}</div>
-                                        </div>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
-
-
                 </div>
             }
         </main>

@@ -3,10 +3,14 @@
 .edit {
     display: flex;
     flex-direction: column;
-    padding: 40px 200px;
+    padding: 2rem 3rem;
+    overflow-y: scroll !important;
     gap: 20px;
     width: 100%;
-
+    height: min-content;
+    height: 100vh;
+    flex: 1;
+    padding-bottom: 140px;
 
     .project {
         display: flex;

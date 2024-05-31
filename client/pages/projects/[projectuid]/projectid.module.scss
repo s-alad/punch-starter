@@ -14,6 +14,7 @@
     padding: 3rem;
     width: 100%;
     gap: 20px;
+    padding-bottom: 200px;
 
 
     .project {
@@ -24,35 +25,92 @@
         .info {
             display: flex;
             align-items: center;
+
             .left {
                 flex: 1;
+
                 .projectname {
                     font-size: 48px;
                     font-weight: bold;
                 }
+
                 .punchline {
                     font-size: 32px;
                 }
+
                 .creator {
                     margin-top: 2px;
                     font-size: 16px;
                     color: gray;
                 }
             }
-            .right {
+        }
+
+        .content {
+            display: flex;
+
+            .left {
                 display: flex;
-                gap: 20px;
+                flex-direction: column;
+                gap: 10px;
+
+                img {
+                    width: 400px;
+                    height: 300px;
+                    object-fit: cover;
+                    border-radius: 4px;
+                }
+
+                .details {
+                    
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                }
+
+                .detail {
+                    .raised {
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+
+                        .bar {
+                            width: 100%;
+                            height: 30px;
+                            border: 2px solid p.$orange;
+                            border-radius: 4px;
+                            padding: 8px;
+                        }
+
+                        .fill {
+                            background-color: p.$orange;
+                            height: 100%;
+                            border-radius: 1px;
+                        }
+
+                        p {
+                            font-weight: bold;
+                            font-size: 18px;
+                            word-wrap: nowrap;
+                            white-space: nowrap;
+                        }
+
+                    }
+                }
+
                 .dao {
                     color: white;
                     background-color: transparent;
                     color: black;
-                    border: 1px solid p.$orange;
+                    border: 2px solid p.$orange;
                     height: 64px;
                     padding: 0px 64px;
                     font-size: 22px;
                     border-radius: 4px;
                     cursor: pointer;
                 }
+
                 .fund {
                     background-color: p.$orange;
                     color: white;
@@ -63,6 +121,7 @@
                     border-radius: 4px;
                     cursor: pointer;
                 }
+
                 .funding {
                     background-color: p.$orange;
                     color: white;
@@ -72,13 +131,14 @@
                     height: 64px;
                     cursor: pointer;
                     display: flex;
-                    
+
 
                     input {
                         border: none;
                         height: 100%;
                         padding: 0px 12px;
                     }
+
                     button {
                         height: 100%;
                         background-color: p.$orange;
@@ -89,92 +149,120 @@
                         padding: 0 24px;
                         cursor: pointer;
                     }
-                
+
                 }
+
             }
-        }
-        .content {
-            display: flex;
-            img {
-                width: 400px;
-                height: 300px;
-                object-fit: cover;
-                border-radius: 4px;
-            }
-            .details {
+
+            .right {
                 flex: 1;
-                padding: 20px;
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-                .detail {
-                    label {
-                        font-size: 16px;
-                        color: gray;
-                    }
-                    p {
-                        font-size: 18px;
-                    }
-                
-                    .raised {
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                        .bar {
-                            width: 340px;
-                            height: 30px;
-                            border: 2px solid p.$orange;
-                            border-radius: 4px;
-                            padding: 8px;
-                        }
-                        .fill {
-                            background-color: p.$orange;
-                            height: 100%;
-                            border-radius: 1px;
-                        }
-                        p {
-                            font-weight: bold;
-                        }
-                    }
-                }
-            }
-        }
-        .milestones {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-
-            .milestone {
                 padding-left: 20px;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 14px;
-                height: min-content;
-
-                .mile {
-                    padding: 8px;
-                    @include c.center();
-                    flex-direction: column;
-                    background-color: black;
-                    border-radius: 2px;
-                    color: white;
-                    label {
-                        font-size: 20px;
-                        color: white;
-                    }
-                }
-
-                .stone {
-                    flex: 1;
+                .milestones {
                     display: flex;
                     flex-direction: column;
-                    gap: 4px;
+                    gap: 20px;
 
-                    .name {
-                        font-size: 24px;
-                        font-weight: bold;
-                    
+                    .milestone {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        gap: 14px;
+                        height: min-content;
+
+                        .mile {
+                            padding: 8px;
+                            @include c.center();
+                            flex-direction: column;
+                            background-color: black;
+                            border-radius: 2px;
+                            color: white;
+
+                            label {
+                                font-size: 20px;
+                                color: white;
+                            }
+                        }
+
+                        .stone {
+                            flex: 1;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 4px;
+
+                            .name {
+                                font-size: 24px;
+                                font-weight: bold;
+
+                            }
+                        }
+                    }
+                }
+
+                .divider {
+                    width: 100%;
+                    height: 2px;
+                    background-color: black;
+                    margin: 20px 0;
+                }
+
+                .commentswrapper {
+                    display: flex;
+                    flex-direction: column;
+                    .top {
+                        display: flex;
+                        gap: 12px;
+                        .upvote {
+                            cursor: pointer;
+                            width: 50px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            gap: 10px;
+                        }
+                        .upvoted {
+                            color: p.$orange;
+                        }
+                        input {
+                            border: 2px solid black;
+                            border-radius: 4px;
+                            padding: 8px;
+                            flex: 1;
+                        }
+                        button {
+                            cursor: pointer;
+                            width: 140px;
+                            padding: 8px;
+                            border-radius: 4px;
+                            background-color: p.$orange;
+                            color: white;
+                            border: 2px solid p.$orange;
+                        }
+                        padding-bottom: 20px;
+                    }
+
+                    .comments {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 4px;
+                        .comment {
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            padding: 6px 0px;
+                            .left {
+                                font-size: 24px;
+                            }
+                            .right {
+                                .username {
+                                    font-style: italic;
+                                    font-weight:500;
+                                    font-size: 16px;
+                                }
+                                .text {
+                                    font-size: 18px;
+                                }
+                            }
+                        }
                     }
                 }
             }

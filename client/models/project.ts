@@ -11,10 +11,13 @@ export default interface Project {
         username: string;
         uid: string;
     }
+    upvotes: number;
     punchline: string;
     description: string;
     deployed: boolean;
     goal: number;
     raised: number;
     expiry: string;
+    comments?: string[];
+    upvoteslist?: string[];
 }

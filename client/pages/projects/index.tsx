@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import Loader from "@/components/loader/loader";
 import { useAuth } from "@/context/authcontext";
 import supabase from "@/utils/supabase";
+import { denomination } from "@/utils/denomination";
 
 export default function Projects() {
     const {session, puncher, disconnect, connect} = useAuth()
@@ -22,7 +23,7 @@ export default function Projects() {
             .from('projects')
             .select(`*, owner!inner(username)`)  
             .eq('owner', puncher?.uid)
-            .then(({ data: projects, error }) => {
+            .then(({ data: projects, error }: any) => {
                 if (error) {
                     console.log(error)
                     return
@@ -61,10 +62,8 @@ export default function Projects() {
     if (!session || !puncher) {
         return (
             <main className={s.projects}>
-                <div className={s.projects}>
-                    <div className={s.project}>
-                        <div className={s.projectname}>You are not signed in</div>
-                    </div>
+                <div className={s.project}>
+                    <div className={s.projectname}>You are not signed in</div>
                 </div>
             </main>
         )
@@ -80,11 +79,9 @@ export default function Projects() {
         <main className={s.projects}>
             {
                 projects.length === 0 &&
-                <div className={s.projects}>
                     <div className={s.project}>
                         <div className={s.projectname}>You have no projects</div>
                     </div>
-                </div>
             }
             {
                 projects.map((project, index) => {
@@ -97,7 +94,7 @@ export default function Projects() {
                                 <div className={s.projectname}>{project.name}</div>
                                 <div className={s.creator}>{project.owner.username}</div>
                                 <div className={s.description}>{project.punchline}</div>
-                                {project.goal && <div className={s.funding}>raised: {project.raised} / {project.goal} STX</div>}
+                                {project.goal && <div className={s.funding}>raised: {project.raised || 0} / {project.goal} {denomination[project.chain]}</div>}
                                 <div className={`${s.deployed} ${project.deployed ? s.live : s.draft}`}>{project.deployed ? "deployed" : "draft"}</div>
                             </div>
                             <div className={s.right}>

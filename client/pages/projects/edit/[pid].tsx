@@ -36,36 +36,28 @@ export default function Projects() {
         setLoading(true);
         console.log("submit", data);
 
-        // check if the display image exists in the bucket already
-        const { data: displayexists } = await supabase.storage
+        // always delete the previous display image
+        const { data: displayexists, error: delerror } = await supabase.storage
             .from("projects")
-            .getPublicUrl(`${project?.pid}/display`);
+            .remove([`${project?.pid}/display`]);
 
-        console.log("exists", displayexists);
-
-        if (displayexists) {
-            console.log("display exists")
-            // update display image
-            const { data: displaydata, error: displayerror } = await supabase.storage
-                .from("projects")
-                .update(`${project?.pid}/display`, data.display);
-                if (displayerror) {
-                    console.error('Error updating file:', displayerror);
-                    setError("Error updating file");
-                    return;
-                }
-        } else {
-            console.log("display does not exist")
-            // upload display image to supabase bucket and get url
-            const { data: displaydata, error: displayerror } = await supabase.storage
-                .from("projects")
-                .upload(`${project?.pid}/display`, data.display);
-                if (displayerror) {
-                    console.error('Error uploading file:', displayerror);
-                    setError("Error uploading file");
-                    return;
-                }
+        if (delerror) {
+            console.error('Error deleting file:', delerror);
+            setError("Error deleting file");
+            return;
         }
+
+
+        // upload display image to supabase bucket and get url
+        const { data: displaydata, error: displayerror } = await supabase.storage
+            .from("projects")
+            .upload(`${project?.pid}/display`, data.display);
+            if (displayerror) {
+                console.error('Error uploading file:', displayerror);
+                setError("Error uploading file");
+                return;
+            }
+        
 
         let displayurl = "";
         // Get the URL of the uploaded file
@@ -118,13 +110,22 @@ export default function Projects() {
             return;
         }
 
+        // push to the project page
+        router.push(`/projects/${project?.pid}`);
     }
 
     const { register, handleSubmit, reset, control, formState: { errors } } =
         useForm<CreateProjectFormData>({
             resolver: zodResolver(createProjectSchema),
             defaultValues: {
-                milestones: []
+                milestones: [
+                    {
+                        name: "",
+                        description: "",
+                        amount: 0,
+                        expiry: ""
+                    }
+                ]
             }
         });
 
@@ -136,7 +137,7 @@ export default function Projects() {
             from('projects')
             .select(`*, owner!inner(username, uid)`)
             .eq('pid', pid)
-            .then(({ data: projects, error }) => {
+            .then(({ data: projects, error }: any) => {
                 if (error) {
                     console.log(error)
                     return
@@ -159,7 +160,8 @@ export default function Projects() {
                     deployed: rproject.deployed,
                     goal: rproject.goal,
                     raised: rproject.raised,
-                    expiry: rproject.expiry
+                    expiry: rproject.expiry,
+                    upvotes: rproject.upvotes,
                 }
 
                 setProject(project)
