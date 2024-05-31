@@ -13,8 +13,10 @@ import { StacksMainnet, StacksTestnet } from "@stacks/network";
 import { base64ToBlob, blobToFile } from "@/utils/conversion";
 import { useEffect, useState } from "react";
 
+import {Input as AntdInput} from "antd";
 import Button from "@/components/button/button";
 import { CVAR } from "@/utils/constant";
+import { Button as ChakraButton } from "@chakra-ui/button";
 import { Input as ChakraInput } from "@chakra-ui/input";
 import { CreateProjectFormData } from "@/validation/form";
 import ImageInput from "@/components/image/image";
@@ -342,47 +344,48 @@ export default function Projects() {
 
   return (
     <main className={s.edit}>
-      <div
-        className="flex flex-col items-center justify-center mt-4"
-        style={{ width: "50%" }}
-      >
-        <Heading as="h1" size="lg" mb="4">
-          Project Creation
-        </Heading>
-        <h3 className="mb-2 text-lg font-semibold">
-          Brief Project Description:
-        </h3>
-        <Textarea
-          className="w-full px-4 py-2 border rounded-md text-black resize-y shadow-sm focus:ring focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Enter text"
-          value={descriptionInput}
-          onChange={(e) => setDescriptionInput(e.target.value)}
-        />
-        <br />
-        <br />
-        <h3 className="mb-2 text-lg font-semibold">
-          Import from Github (URL):
-        </h3>
-        <ChakraInput
-          type="text"
-          placeholder="Enter GitHub link"
-          value={githubLinkInput}
-          onChange={(e) => setGithubLinkInput(e.target.value)}
-        />
-        <br />
-        <br />
-        <Button onClick={handleFormPopulationSubmit} text=" Generate Project Description" />
-        {formLoading && (
-          <img
-            style={{ borderRadius: 50, marginTop: 30 }}
-            src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnF3eWJxd2ZtaXhmd3hsOGZlM3N1c3hmOTdzY3F6aWJnbDF3emN2YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/unQ3IJU2RG7DO/giphy.gif"
-          ></img>
-        )}
-      </div>
       {project && (
         <div className={s.project}>
           <div className={s.projectname}>{project.name}</div>
           <div className={s.creator}>{project.owner.username}</div>
+          <div
+            className="flex flex-col items-center justify-center mt-4"
+            style={{ width: "50%" }}
+          >
+            <Heading as="h1" size="lg" mb="4">
+              Project Creation
+            </Heading>
+            <h3 className="mb-2 text-lg font-semibold">
+              Brief Project Description:
+            </h3>
+            <AntdInput.TextArea
+              placeholder="Enter text"
+              value={descriptionInput}
+              onChange={(e) => setDescriptionInput(e.target.value)}
+            />
+            <br />
+            <br />
+            <h3 className="mb-2 text-lg font-semibold">
+              Import from Github (URL):
+            </h3>
+            <AntdInput
+              type="text"
+              placeholder="Enter GitHub link"
+              value={githubLinkInput}
+              onChange={(e) => setGithubLinkInput(e.target.value)}
+            />
+            <br />
+            <br />
+            <Button onClick={handleFormPopulationSubmit} text="Generate Project Description">
+              
+            </Button>
+            {formLoading && (
+              <img
+                style={{ borderRadius: 50, marginTop: 30 }}
+                src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnF3eWJxd2ZtaXhmd3hsOGZlM3N1c3hmOTdzY3F6aWJnbDF3emN2YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/unQ3IJU2RG7DO/giphy.gif"
+              ></img>
+            )}
+          </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input<CreateProjectFormData>
               name="punchline"
