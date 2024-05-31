@@ -56,7 +56,7 @@ export const exampleProject = {
   ],
 };
 
-export const projectList = [
+export let projectList = [
   { project: exampleProject, creator: exampleCreator },
   {
     project: {
