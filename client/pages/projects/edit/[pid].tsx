@@ -13,7 +13,7 @@ import { StacksMainnet, StacksTestnet } from "@stacks/network";
 import { base64ToBlob, blobToFile } from "@/utils/conversion";
 import { useEffect, useState } from "react";
 
-import {Input as AntdInput} from "antd";
+import { Input as AntdInput } from "antd";
 import Button from "@/components/button/button";
 import { CVAR } from "@/utils/constant";
 import { Button as ChakraButton } from "@chakra-ui/button";
@@ -376,9 +376,10 @@ export default function Projects() {
             />
             <br />
             <br />
-            <Button onClick={handleFormPopulationSubmit} text="Generate Project Description">
-              
-            </Button>
+            <Button
+              onClick={handleFormPopulationSubmit}
+              text="Generate Project Description"
+            ></Button>
             {formLoading && (
               <img
                 style={{ borderRadius: 50, marginTop: 30 }}
