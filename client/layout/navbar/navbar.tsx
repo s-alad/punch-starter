@@ -23,7 +23,7 @@ export default function Navbar() {
 
   const theme = useTheme();
 
-  const accentColor = useColorModeValue("#e03a44", "#e03a44");
+  const accentColor = theme.colors.accent;
   const inputBgColor = useColorModeValue("black", "black");
   const textColor = useColorModeValue("white", "white");
 

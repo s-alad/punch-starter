@@ -63,30 +63,25 @@ const queryClient = new QueryClient();
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
-      <WalletProvider>
-        <RedirectBasedOnAuth>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </RedirectBasedOnAuth>
-      </WalletProvider>
       <RedirectBasedOnAuth>
-        <ChakraProvider theme={theme}>
-          <WagmiProvider config={config}>
-            <QueryClientProvider client={queryClient}>
-              <RainbowKitProvider
-                theme={darkTheme({
-                  accentColor: ACCENT_COLOR,
-                  accentColorForeground: "white",
-                })}
-              >
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
-              </RainbowKitProvider>
-            </QueryClientProvider>
-          </WagmiProvider>
-        </ChakraProvider>
+        <WalletProvider>
+          <ChakraProvider theme={theme}>
+            <WagmiProvider config={config}>
+              <QueryClientProvider client={queryClient}>
+                <RainbowKitProvider
+                  theme={darkTheme({
+                    accentColor: ACCENT_COLOR,
+                    accentColorForeground: "white",
+                  })}
+                >
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </RainbowKitProvider>
+              </QueryClientProvider>
+            </WagmiProvider>
+          </ChakraProvider>
+        </WalletProvider>
       </RedirectBasedOnAuth>
     </AuthProvider>
   );
