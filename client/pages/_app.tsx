@@ -28,7 +28,11 @@ const rootstock = {
   iconBackground: "#fff",
   nativeCurrency: { name: "Rootstock", symbol: "RSK", decimals: 18 },
   rpcUrls: {
-    default: { http: ["https://public-node.rsk.co"] },
+    default: {
+      http: [
+        "https://rpc.testnet.rootstock.io/BD1610OtMygKY9dumpVrly8fzxohdE-T",
+      ],
+    },
   },
   blockExplorers: {
     default: { name: "RootSplorer", url: "https://explorer.rootstock.io/" },
