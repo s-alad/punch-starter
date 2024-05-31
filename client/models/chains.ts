@@ -1,1 +1,1 @@
-export type CHAINS = "stacks" | "sui";
+export type CHAINS = "stacks" | "sui" | "stellar" | "rootstock";

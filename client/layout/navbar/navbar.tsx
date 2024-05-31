@@ -5,6 +5,7 @@ import s from "./navbar.module.scss"
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/authcontext";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Navbar() {
     const router = useRouter();
@@ -27,7 +28,8 @@ export default function Navbar() {
     return (
         <nav className={s.nav}>
             <div className={s.splash}>
-                <div>PUNCH STARTER</div>
+                <Image src="/fire.svg" width={50} height={50} alt="logo"/>
+                <>Punch Starter</>
             </div>
 
             <div className={s.right}>

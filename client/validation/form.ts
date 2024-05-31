@@ -20,7 +20,7 @@ export type OnboardingFormData = {
 
 export type StartProjectFormData = {
     projectname: string;
-    chain: "stacks" | "sui"
+    chain: "stacks" | "sui" | "stellar" | "rootstock";
 }
 
 export type CreateProjectFormData = {

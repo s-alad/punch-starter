@@ -13,7 +13,7 @@ export const onboardingSchema: ZodType<OnboardingFormData> = z
 export const startProjectSchema: ZodType<StartProjectFormData> = z
     .object({
         projectname: z.string().min(1).max(50),
-        chain: ZodEnum.create(["stacks", "sui"]),
+        chain: ZodEnum.create(["stacks", "sui", "stellar", "rootstock"]),
     })
 
 export const milestoneSchema: ZodType<Milestone> = z

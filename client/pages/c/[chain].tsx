@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import s from "./chain.module.scss";
 import { useRouter } from "next/router";
@@ -50,15 +50,21 @@ export default function Chain() {
             upvotes: p.upvotes,
         }));
 
+        console.log(projects);
+
         setProjects(projects);
 
     }
+
+    useEffect(() => {
+        getProjects();
+    }, [chain])
         
 
     return (
         <div className={s.chain}>
             <h1>{chain}</h1>
-            <div className={s.projects}>
+            <div className={s.cards}>
                 {
                     projects.map(project => (
                         <Card key={project.pid} project={project} />

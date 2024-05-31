@@ -4,4 +4,6 @@ export const denomination = {
     "ethereum": "ETH",
     "sui": "SUI",
     "stellar": "XLM",
+    "rootstock": "RSK",
+    "solana": "SOL",
 }

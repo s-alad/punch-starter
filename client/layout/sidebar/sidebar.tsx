@@ -40,6 +40,11 @@ export default function Sidebar() {
             href: "/c/sui",
             icon: "https://cryptologos.cc/logos/sui-sui-logo.png"
         },
+        {
+            name: "Rootstock",
+            href: "/c/rootstock",
+            icon: "https://asset.brandfetch.io/idlHNCkrJa/idvZdDhAxY.jpeg"
+        }
     ]
     
     return (

@@ -72,7 +72,9 @@ export default function Raise() {
 
     const chains = {
         stacks: "stacks",
-        sui: "sui"
+        sui: "sui",
+        rootstock: "rootstock",
+        stellar: "stellar",
     }
 
     return (
