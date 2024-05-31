@@ -101,12 +101,10 @@ impl CrowdfundContract {
         milestone_names.push_back(name.clone());
         milestone_amounts.push_back(amount);
         milestone_descriptions.push_back(description);
-        milestone_claimed.push_back(0);
 
         env.storage().instance().set(&MILESTONE_NAMES, &milestone_names);
         env.storage().instance().set(&MILESTONE_AMOUNTS, &milestone_amounts);
         env.storage().instance().set(&MILESTONE_DESCRIPTIONS, &milestone_descriptions);
-        env.storage().instance().set(&MILESTONE_CLAIMED, &milestone_claimed);
 
         log!(&env, "Milestone added: {} - {}", name, amount);
     }
@@ -124,16 +122,23 @@ impl CrowdfundContract {
     pub fn vote_freeze(env: Env, funder: Address, votes: u64) {
         let mut frz_vote: u64 = env.storage().instance().get(&FRZ_VOTE).unwrap();
         let mut frz_voter: Vec<Address> = env.storage().instance().get(&FRZ_VOTER).unwrap();
-        let mut project_votes: u64 = env.storage().instance().get(&PROJECT_VOTES).unwrap();
 
         frz_vote += votes;
         frz_voter.push_back(funder.clone());
-        project_votes += votes;
 
         env.storage().instance().set(&FRZ_VOTE, &frz_vote);
         env.storage().instance().set(&FRZ_VOTER, &frz_voter);
-        env.storage().instance().set(&PROJECT_VOTES, &project_votes);
 
         log!(&env, "Freeze vote by {:?} with {} votes. Total freeze votes: {}", funder, votes, frz_vote);
+    }
+
+    pub fn vote_project(env: Env, funder: Address, votes: u64) {
+        let mut project_votes: u64 = env.storage().instance().get(&PROJECT_VOTES).unwrap();
+
+        project_votes += votes;
+
+        env.storage().instance().set(&PROJECT_VOTES, &project_votes);
+
+        log!(&env, "Project vote by {:?} with {} votes. Total project votes: {}", funder, votes, project_votes);
     }
 }

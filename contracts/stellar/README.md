@@ -31,13 +31,14 @@ soroban contract install \
 
 
 soroban contract deploy \
-  --wasm-hash 0c21aa5a958604153e8745a58e437af37efb7a51ff5a46268f1560b443727208 \
+  --wasm-hash d1f31fa604e94038dc74ae75e669696f799dc9d9aa5d2024ab8bed88953e0670 \
   --source alice \
   --network testnet
 
+CBY7HQJTR5XBMWRIGFVULVR4PJOSYC5WIDB7AAMLCMLTMZQ74BWDPDGE
 
 soroban contract invoke \
-  --id CCQRTXDGPWLFVGCMQH72EOZB5BRL3SOEDPRT7MDUIZY5D2D2ISGNMF44 \
+  --id CBY7HQJTR5XBMWRIGFVULVR4PJOSYC5WIDB7AAMLCMLTMZQ74BWDPDGE \
   --source alice \
   --network testnet \
   -- \
@@ -46,20 +47,47 @@ soroban contract invoke \
   --goal 1234
 
 soroban contract invoke \
-  --id CCQRTXDGPWLFVGCMQH72EOZB5BRL3SOEDPRT7MDUIZY5D2D2ISGNMF44 \
+  --id CBY7HQJTR5XBMWRIGFVULVR4PJOSYC5WIDB7AAMLCMLTMZQ74BWDPDGE \
   --source alice \
   --network testnet \
   -- \
   get_project
 
 soroban contract invoke \
-  --id CCQRTXDGPWLFVGCMQH72EOZB5BRL3SOEDPRT7MDUIZY5D2D2ISGNMF44 \
+  --id CBY7HQJTR5XBMWRIGFVULVR4PJOSYC5WIDB7AAMLCMLTMZQ74BWDPDGE \
   --source alice \
   --network testnet \
   -- \
   add_fund \
   --funder GBTOUSH4LUEV7SPKNLXTUIMCE6ACNHB7LFP3JSZZKIELSMNSRBKQCX2E \
   --amount 100
+
+soroban contract invoke \
+  --id CBY7HQJTR5XBMWRIGFVULVR4PJOSYC5WIDB7AAMLCMLTMZQ74BWDPDGE \
+  --source alice \
+  --network testnet \
+  -- \
+  vote_freeze \
+  --funder GBTOUSH4LUEV7SPKNLXTUIMCE6ACNHB7LFP3JSZZKIELSMNSRBKQCX2E \
+  --votes 10
+
+soroban contract invoke \
+  --id CBY7HQJTR5XBMWRIGFVULVR4PJOSYC5WIDB7AAMLCMLTMZQ74BWDPDGE \
+  --source alice \
+  --network testnet \
+  -- \
+  claim_milestone \
+  --milestone_index 0
+
+soroban contract invoke \
+  --id CBY7HQJTR5XBMWRIGFVULVR4PJOSYC5WIDB7AAMLCMLTMZQ74BWDPDGE \
+  --source alice \
+  --network testnet \
+  -- \
+  add_milestone \
+  --name "Deploy to testnet" \
+  --amount 300 \
+  --description "Deploy smart contract to testnet"
 
 Working hello contract:
 
