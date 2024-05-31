@@ -15,17 +15,32 @@ import {
   getDefaultConfig,
   RainbowKitProvider,
   darkTheme,
+  Chain,
 } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, base } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { SomeRandomWalletConnect } from "@/sdk-connection-code/sui-connection";
 
+const rootstock = {
+  id: 30,
+  name: "Rootstock",
+  iconUrl: "https://dev.rootstock.io/assets/img/rootstock-icon.png",
+  iconBackground: "#fff",
+  nativeCurrency: { name: "Rootstock", symbol: "RSK", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://public-node.rsk.co"] },
+  },
+  blockExplorers: {
+    default: { name: "RootSplorer", url: "https://explorer.rootstock.io/" },
+  },
+} as const satisfies Chain;
+
 // Config RainbowKit
 const config = getDefaultConfig({
   appName: "Punchstarter",
   projectId: "43a20e9b2e7ecab22145e7b0825a70e4",
-  chains: [mainnet, polygon, optimism, arbitrum, base],
+  chains: [rootstock],
 });
 
 // Define your custom colors

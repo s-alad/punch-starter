@@ -41,11 +41,20 @@ const subchains: NavItem[] = [
     href: "/c/sui",
     icon: "https://cryptologos.cc/logos/sui-sui-logo.png",
   },
+  {
+    name: "Rootstock",
+    href: "/c/rootstock",
+    icon: "https://asset.brandfetch.io/idlHNCkrJa/idvZdDhAxY.jpeg"
+  },
 ];
 
 const Sidebar: React.FC = () => {
   return (
-    <Box borderRight="1px" borderColor="#888b90">
+    <Box
+      borderRight="1px"
+      borderColor="#888b90"
+      width={{ base: "80%", md: "20%" }}
+    >
       <Box height="10px" /> {/* Spacer */}
       <Heading size={"sm"} fontWeight={"400"} color={"#d3d3d3"} ml={4} mb={1}>
         Feeds
