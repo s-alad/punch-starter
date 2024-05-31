@@ -1,12 +1,14 @@
 import { Button, Card, Collapse } from "antd";
+import {
+  exampleCreator,
+  exampleProject,
+  placeholderImageUrl,
+} from "@/utils/constant";
 
 import { Input as AntInput } from "antd";
-import {
-  ChatCompletionMessageParam,
-} from "openai/resources/index.mjs";
+import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 import OpenAI from "openai";
 import React from "react";
-import { placeholderImageUrl } from "@/utils/constant";
 import { useState } from "react";
 
 const { Panel } = Collapse;
@@ -14,16 +16,18 @@ const openai = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
   dangerouslyAllowBrowser: true,
 });
-export default function Projects() {
-  
-  const [project, setProject] = useState({projectName: "Project Name", projectDescription: "Project Description", projectPunchline: "Project Punchline", ownerStacksAddress: "Owner Stacks Address", projectDisplayImage: "Project Display Image", expiry: "Expiry", amountRaised: 0, fundingGoal: 0, milestones: [{milestoneName: "Milestone Name", milestoneDescription: "Milestone Description"}], deployed: true});
+export default function ChatPage() {
+  const chat = ChatUI(exampleProject, exampleCreator);
+  return chat;
+}
 
+export function ChatUI(project: any, creator: any) {
   const [userQuestion, setUserQuestion] = useState<string>("");
   const [generatedResponse, setGeneratedResponse] = useState<string>("");
   let [loading, setLoading] = useState(true);
   let [amount, setAmount] = useState(0);
   let [funding, setFunding] = useState(false);
-  const [creator, setCreator] = useState({name: "William", email: "bwilliamwang@gmail.com"});
+  const [chatHeader, setChatHeader] = useState<string>("Chat with Project!");
   let [messages, setMessages] = useState<ChatCompletionMessageParam[]>([]);
 
   async function getProject() {
@@ -32,8 +36,12 @@ export default function Projects() {
 
     const creatorString = JSON.stringify(creator).slice(0, 2000);
     const projectString = JSON.stringify(project).slice(0, 2000);
-
-
+    console.log(
+      creatorString,
+      projectString,
+      project["projectname"],
+      creator.name
+    );
     setMessages([
       ...messages,
       {
@@ -46,13 +54,18 @@ export default function Projects() {
       },
     ]);
     setGeneratedResponse(
-      `Ask me anything about the project \'${proj.projectname}\' or the creator \'${creator.name}\'.`
+      `Ask me anything about the project \'${project.projectname}\' or the creator \'${creator.name}\'.`
     );
     setLoading(false);
   }
 
+  React.useEffect(() => {
+    getProject();
+  }, [project]);
+
   const handleQuestion = async (question: string) => {
     console.log(question, messages);
+    setChatHeader(question);
     setGeneratedResponse("Asking... " + question);
     try {
       const newMessages: ChatCompletionMessageParam[] = [
@@ -117,19 +130,15 @@ export default function Projects() {
     }
   };
 
-
   return (
     <main>
       <div style={{ display: "flex", flexDirection: "row", gap: 40 }}>
         {creator && (
-          <Card
-            style={{ textAlign: "center", marginTop: 50 }}
-          >
-            <div >
+          <Card style={{ textAlign: "center", marginTop: 50 }}>
+            <div>
               <img
                 src={creator.profileImageUrl || placeholderImageUrl}
                 alt="Profile"
-            
                 style={{ borderRadius: "50%", height: 150, width: 150 }}
               />
               <div>
@@ -207,18 +216,21 @@ export default function Projects() {
             </Collapse>
           </Card>
         )}
-        <Card
-          style={{  textAlign: "center", marginTop: 50 }}
-        >
+        <Card style={{ textAlign: "center", marginTop: 50 }}>
           <div>
-            <h3>Project AI</h3>
+            <h3 style={{ fontSize: 20 }}>{chatHeader}</h3>
             <p>{generatedResponse}</p>
             <AntInput.TextArea
               value={userQuestion}
               onChange={(e) => setUserQuestion(e.target.value)}
             />
             <br />
-            <Button style={{marginTop: 20}} onClick={() => handleQuestion(userQuestion)}>Ask</Button>
+            <Button
+              style={{ marginTop: 20 }}
+              onClick={() => handleQuestion(userQuestion)}
+            >
+              Ask
+            </Button>
           </div>
         </Card>
       </div>

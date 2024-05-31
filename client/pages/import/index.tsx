@@ -16,7 +16,7 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-export default function ChatUI() {
+export default function ImportUI() {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [formLoading, setFormLoading] = useState<boolean>(false);
@@ -48,6 +48,7 @@ export default function ChatUI() {
             parameters: {
               type: "object",
               properties: {
+                projectname: { type: "string" },
                 projectpunchline: { type: "string" },
                 projectdescription: { type: "string" },
                 projectdisplayimage: { type: "string" }, // URL for simplicity
