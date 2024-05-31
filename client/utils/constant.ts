@@ -12,23 +12,6 @@ export const exampleCreator = {
   onboarded: true,
   email: "bwilliamwang@gmail.com",
   name: "William Wang",
-  stacksaddress: "SP1BMPA4S2NQ8PSC52PGWB0EMEDRBNK5S2GNM6QD6",
-  user: {
-    appConfig: {
-      appDomain: "http://localhost:3001",
-      scopes: ["store_write", "publish_data"],
-      redirectPath: "",
-      manifestPath: "/manifest.json",
-      authenticatorURL: "https://browser.blockstack.org/auth",
-    },
-    store: {
-      key: "blockstack-session",
-    },
-  },
-  publickey:
-    "02a7c406e096347ab22a7c1757375ff36a517f23362729d56db7e30210fc2ccb71",
-  signature:
-    "90d542d1c62f1f41d30c1617c7e4e203ae5e95adef772c1736f0f4f11ee82bf96f0a4ea13ff521b9ebdaa81ab0825a4299f7185cd929a99691c308554720c7ed00",
   bio: "i like karaoke and hackathons",
   username: "williamwang",
   profileImageUrl:
@@ -46,6 +29,7 @@ export const exampleCreator = {
 };
 
 export const exampleProject = {
+  projectimageurl: "./logo.png",
   projectname: "PunchStarter",
   projectdescription:
     "PunchStarter is a crowdfunding platform designed specifically for blockchain projects. It incorporates decentralized autonomous organizations (DAOs) to verify project milestones and ensure transparency in project development. With PunchStarter, project creators can raise funds for their blockchain initiatives while providing clear evidence of progress through verified milestones.",
@@ -72,23 +56,149 @@ export const exampleProject = {
   ],
 };
 
+export const projectList = [
+  { project: exampleProject, creator: exampleCreator },
+  {
+    project: {
+      projectimageurl: "./befit.jpeg",
+      projectname: "BeFit",
+      projectdescription:
+        "BeFit revolutionizes fitness motivation by blending the spontaneity of BeReal with the accountability and rewards of exercising. At random times, BeFit prompts users to complete a specified exercise, using machine learning to verify completion via camera. Successfully performed exercises are rewarded with unique NFTs, creating a tangible record of achievements. Users can view friends' exercise accomplishments, fostering a community of support and motivation.",
+      projectpunchline: "Fitness Motivation with BeFit",
+      expiry: "2023-12-31",
+      fundinggoal: 20000,
+      milestones: [
+        {
+          milestonename: "App Development",
+          milestonedescription:
+            "Develop the BeFit mobile application with core features.",
+        },
+        {
+          milestonename: "ML Integration",
+          milestonedescription:
+            "Integrate machine learning for exercise verification.",
+        },
+        {
+          milestonename: "Community Building",
+          milestonedescription:
+            "Foster a community of users and support networks.",
+        },
+      ],
+    },
+    creator: {
+      name: "Xavier D'Mello & William Wang",
+    },
+  },
+  {
+    project: {
+
+      projectname: "TooFake",
+      projectdescription:
+        "TooFake is a BeReal viewer and web client that allows you to view and download BeReals, and post custom BeReals and RealMojis without having to click on notifications.",
+      projectpunchline: "A BeReal viewer & web client",
+      expiry: "2023-06-30",
+      fundinggoal: 15000,
+      milestones: [
+        {
+          milestonename: "Web Development",
+          milestonedescription:
+            "Develop the TooFake web application with core features.",
+        },
+        {
+          milestonename: "User Authentication",
+          milestonedescription:
+            "Implement user authentication and privacy features.",
+        },
+        {
+          milestonename: "Feature Expansion",
+          milestonedescription:
+            "Add custom BeReals and RealMojis functionality.",
+        },
+      ],
+    },
+    creator: {
+      name: "Unknown",
+    },
+  },
+  {
+    project: {
+      projectname: "Movelo",
+      projectdescription:
+        "Movelo is an app that incentivizes sustainable travel through cash rewards while collecting valuable commuting data for businesses to use on their ESG reports.",
+      projectpunchline: "Incentivizing Sustainable Travel",
+      expiry: "2024-03-31",
+      fundinggoal: 30000,
+      milestones: [
+        {
+          milestonename: "App Development",
+          milestonedescription:
+            "Develop the Movelo mobile application with core features.",
+        },
+        {
+          milestonename: "Data Collection",
+          milestonedescription:
+            "Implement data collection for commuting insights.",
+        },
+        {
+          milestonename: "ESG Reporting",
+          milestonedescription:
+            "Develop features for businesses to generate ESG reports.",
+        },
+      ],
+    },
+    creator: {
+      name: "Unknown",
+    },
+  },
+  {
+    project: {
+      projectname: "Civic Tech Voting",
+      projectdescription:
+        "Developed for the Civic Tech hackathon hosted by Boston University and Howard University on February 17-18, 2024. This project is a web application that allows users to vote in elections using zero-knowledge proofs. This allows for secure and anonymous voting, while also ensuring complete transparency and verifiability of the election results.",
+      projectpunchline: "Secure and Anonymous Voting",
+      expiry: "2024-02-18",
+      fundinggoal: 25000,
+      milestones: [
+        {
+          milestonename: "Web Development",
+          milestonedescription:
+            "Develop the web application with voting features.",
+        },
+        {
+          milestonename: "Zero-Knowledge Proofs",
+          milestonedescription:
+            "Implement zero-knowledge proofs for secure voting.",
+        },
+        {
+          milestonename: "Transparency Features",
+          milestonedescription:
+            "Ensure transparency and verifiability of election results.",
+        },
+      ],
+    },
+    creator: {
+      name: "Unknown",
+    },
+  },
+];
+
 export const emptyProject = {
-    projectpunchline: "",
-    projectdescription: "",
-    expiry: "2023-12-31",
-    fundinggoal: 0,
-    milestones: [
-      {
-        milestonename: "",
-        milestonedescription: ""
-      },
-      {
-        milestonename: "",
-        milestonedescription: ""
-      },
-      {
-        milestonename: "",
-        milestonedescription: ""
-      }
-    ]
-  };
+  projectpunchline: "",
+  projectdescription: "",
+  expiry: "2023-12-31",
+  fundinggoal: 0,
+  milestones: [
+    {
+      milestonename: "",
+      milestonedescription: "",
+    },
+    {
+      milestonename: "",
+      milestonedescription: "",
+    },
+    {
+      milestonename: "",
+      milestonedescription: "",
+    },
+  ],
+};
