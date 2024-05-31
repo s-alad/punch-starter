@@ -187,12 +187,17 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     async function disconnect() {
-
+        await supabase.auth.signOut();
+        setSession(null)
+        setPuncher(null)
+        setUser(null)
+        localStorage.removeItem("raiser");
+        router.push("/");
     }
 
     return (
         <AuthContext.Provider value={{ session, puncher, loading, connect, disconnect, askToRefresh }}>
-            {(loading || !puncher)  ? <div>Loading...</div> : children}
+            {(loading)  ? <div>Loading...</div> : children}
         </AuthContext.Provider>
     );
 };

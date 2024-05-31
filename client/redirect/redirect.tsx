@@ -11,6 +11,7 @@ const protectedRoutes = [
     "/profile",
     "/onboarding",
     "/connect",
+
 ];
 
 export default function RedirectBasedOnAuth({ children }: { children: React.ReactNode }) {
@@ -31,6 +32,7 @@ export default function RedirectBasedOnAuth({ children }: { children: React.Reac
         }
 
         if (protectedRoutes.includes(currentRoute)) {
+            console.log("current route is protected");
             if ((!session && !calledPush)) {
                 setCalledPush(true);
                 router.push("/");
