@@ -1,21 +1,25 @@
 import React from "react";
 import { useEffect, useState } from "react";
-
+import Post from "@/components/Post";
+import { Box, Heading } from "@chakra-ui/react";
+// find top post and display as card
 export default function Top() {
   return (
-    <div>
-      <h1>Most liked today!</h1>
-      <div>
-        <img src="https://cdn.pixabay.com/photo/2018/01/18/07/31/bitcoin-3089728_1280.jpg" />
-        <h2>Project Name</h2>
-        <h3>author: xyz</h3>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident
-          sint, ipsam totam officiis praesentium, voluptates aut consectetur
-          commodi doloribus dicta debitis, sapiente corrupti rerum autem
-          consequuntur doloremque incidunt. Impedit, minima.
-        </p>
-      </div>
-    </div>
+    <Box alignItems={"center"} display={"flex"} flexDirection={"column"}>
+      <Heading mb="7px" size="sm" fontWeight={"400"} textColor={"#d3d3d3"}>
+        Punchstarter Featured
+      </Heading>
+
+      <Box maxW={"500px"} height={"500px"}>
+        <Post
+          projectName="googly googly"
+          author="rfk"
+          description="googly boogly oogly loogly. googly boogly oogly loogly.googly boogly oogly loogly.googly boogly oogly loogly.googly boogly oogly loogly.googly boogly oogly loogly.googly boogly oogly loogly."
+          image="https://chumley.barstoolsports.com/union/2024/04/19/zuck-beard.e8aec17b.jpeg?fit=bounds&format=pjpg&auto=webp&quality=85%2C75"
+          upvoteCount={69}
+          onUpvote={() => console.log("rahhhh")}
+        />
+      </Box>
+    </Box>
   );
 }
