@@ -1,185 +1,227 @@
-import { Button, Textarea } from "@chakra-ui/react";
+import { Button, Card, Collapse } from "antd";
+
+import { Input as AntInput } from "antd";
 import {
   ChatCompletionMessageParam,
-  ChatCompletionTool,
 } from "openai/resources/index.mjs";
-
-import { Input } from "@chakra-ui/input";
 import OpenAI from "openai";
 import React from "react";
-import ReactMarkdown from "react-markdown";
-import { useRouter } from "next/router";
+import { placeholderImageUrl } from "@/utils/constant";
 import { useState } from "react";
 
+const { Panel } = Collapse;
 const openai = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
   dangerouslyAllowBrowser: true,
 });
+export default function Projects() {
+  
+  const [project, setProject] = useState({projectName: "Project Name", projectDescription: "Project Description", projectPunchline: "Project Punchline", ownerStacksAddress: "Owner Stacks Address", projectDisplayImage: "Project Display Image", expiry: "Expiry", amountRaised: 0, fundingGoal: 0, milestones: [{milestoneName: "Milestone Name", milestoneDescription: "Milestone Description"}], deployed: true});
 
-export default function ChatUI() {
-  const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [formLoading, setFormLoading] = useState<boolean>(false);
+  const [userQuestion, setUserQuestion] = useState<string>("");
+  const [generatedResponse, setGeneratedResponse] = useState<string>("");
+  let [loading, setLoading] = useState(true);
+  let [amount, setAmount] = useState(0);
+  let [funding, setFunding] = useState(false);
+  const [creator, setCreator] = useState({name: "William", email: "bwilliamwang@gmail.com"});
+  let [messages, setMessages] = useState<ChatCompletionMessageParam[]>([]);
 
-  const [project, setProject] = useState();
+  async function getProject() {
+    setLoading(true);
+    console.log("getting project");
 
-  const [descriptionInput, setDescriptionInput] = useState(
-    "A crowdfunding platform for blockchain projects."
-  );
-  const [githubLinkInput, setGithubLinkInput] = useState(
-    "https://github.com/WilliamUW/consensus"
-  );
-  const [generatedDescription, setGeneratedDescription] = useState(``);
+    const creatorString = JSON.stringify(creator).slice(0, 2000);
+    const projectString = JSON.stringify(project).slice(0, 2000);
 
-  const handleFormPopulationSubmit = async () => {
-    setFormLoading(true);
-    setGeneratedDescription(
-      "We are generating your project details... Please wait up to 30 seconds!"
+
+    setMessages([
+      ...messages,
+      {
+        role: "system",
+        content: `You are a helpful assistant that will answer questions about the project and creator at hand.
+      
+      Project: ${projectString}
+      
+      Creator: ${creatorString}`,
+      },
+    ]);
+    setGeneratedResponse(
+      `Ask me anything about the project \'${proj.projectname}\' or the creator \'${creator.name}\'.`
     );
-    console.log(descriptionInput, githubLinkInput);
+    setLoading(false);
+  }
+
+  const handleQuestion = async (question: string) => {
+    console.log(question, messages);
+    setGeneratedResponse("Asking... " + question);
     try {
+      const newMessages: ChatCompletionMessageParam[] = [
+        ...messages,
+        {
+          role: "user",
+          content: `${question}`,
+        },
+      ];
+      setMessages((messages) => [
+        ...messages,
+        {
+          role: "user",
+          content: `${question}`,
+        },
+      ]);
       const tools = [
         {
           type: "function",
           function: {
-            name: "set_project_details",
+            name: "contact_user",
             description:
-              "Generate project details based on given project information.",
+              "Contact the creator of the project to ask for more information.",
             parameters: {
               type: "object",
-              properties: {
-                projectpunchline: { type: "string" },
-                projectdescription: { type: "string" },
-                projectdisplayimage: { type: "string" }, // URL for simplicity
-                expiry: {
-                  type: "string",
-                  description:
-                    "Date in the format: '2022-12-31' without the quotes",
-                },
-                fundinggoal: { type: "number" },
-                milestones: {
-                  type: "array",
-                  items: {
-                    type: "object",
-                    properties: {
-                      milestonename: { type: "string" },
-                      milestonedescription: { type: "string" },
-                    },
-                    required: ["milestonename", "milestonedescription"],
-                  },
-                },
-              },
-              required: [
-                "projectpunchline",
-                "projectdescription",
-                "expiry",
-                "fundinggoal",
-                "milestones",
-              ],
+              properties: {},
+              required: [],
             },
           },
-        },
-      ];
-
-      const messages = [
-        {
-          role: "system",
-          content: "You are a helpful assistant.",
-        },
-        {
-          role: "user",
-          content: `Generate an application-style project description based on the following details. 
-            
-                      Project Description: ${descriptionInput} 
-                      
-                      GitHub Link: ${githubLinkInput}`,
         },
       ];
 
       const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         max_tokens: 500,
-        messages: messages as ChatCompletionMessageParam[],
-        tools: tools as ChatCompletionTool[],
-        tool_choice: "auto",
+        messages: newMessages,
+        // tools: tools as ChatCompletionTool[],
+        // tool_choice: "none",
       });
       console.log(response.choices[0]);
 
       const gptDescription = response.choices[0].message.content;
-      setGeneratedDescription(gptDescription || "No description generated.");
-
+      console.log(gptDescription);
+      setGeneratedResponse(gptDescription || "No response");
+      setMessages([
+        ...messages,
+        {
+          role: "assistant",
+          content: `${gptDescription}`,
+        },
+      ]);
       const responseMessage = response.choices[0].message;
       const toolCalls = responseMessage.tool_calls;
 
       if (toolCalls) {
         for (const toolCall of toolCalls) {
           const functionArgs = JSON.parse(toolCall.function.arguments);
-
-          setProject(functionArgs);
-
-          setGeneratedDescription(
-            responseMessage.content || "Form populated successfully!  "
-          );
         }
       }
     } catch (error) {
       console.error("Error generating project description:", error);
     }
-    setFormLoading(false);
   };
 
+
   return (
-    <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
-      <div
-        className="flex flex-col items-center justify-center mt-4"
-        style={{ width: "50%" }}
-      >
-        <h3 className="mb-2 text-lg font-semibold">
-          Brief Project Description:
-        </h3>
-        <Textarea
-          className="w-full px-4 py-2 border rounded-md text-black resize-y shadow-sm focus:ring focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Enter text"
-          value={descriptionInput}
-          onChange={(e) => setDescriptionInput(e.target.value)}
-        />
-        <br />
-        <br />
-        <h3 className="mb-2 text-lg font-semibold">
-          Import from Github (URL):
-        </h3>
-        <Input
-          type="text"
-          className="w-full px-4 py-2 border rounded-md text-black shadow-sm focus:ring focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Enter GitHub link"
-          value={githubLinkInput}
-          onChange={(e) => setGithubLinkInput(e.target.value)}
-        />
-        <br />
-        <br />
-        <Button onClick={handleFormPopulationSubmit}>
-          Generate Project Description
-        </Button>
-        {generatedDescription && (
-          <div
-            className="mt-16 p-4 border rounded-md text-left"
-            style={{ maxWidth: "100% " }}
+    <main>
+      <div style={{ display: "flex", flexDirection: "row", gap: 40 }}>
+        {creator && (
+          <Card
+            style={{ textAlign: "center", marginTop: 50 }}
           >
+            <div >
+              <img
+                src={creator.profileImageUrl || placeholderImageUrl}
+                alt="Profile"
+            
+                style={{ borderRadius: "50%", height: 150, width: 150 }}
+              />
+              <div>
+                <h3>{creator.name}</h3>
+                <p>{creator.email}</p>
+                <p>{creator.education}</p>
+                <p>{creator.bio?.slice(0, 100)}</p>
+              </div>
+            </div>
             <br />
-            <h3 className="text-xl font-bold">Generated Project Description</h3>
+            <Collapse>
+              <Panel header="See Full Profile" key="1">
+                <p>
+                  <strong>Username:</strong> {creator.username}
+                </p>
+                <p>
+                  <strong>Email:</strong> {creator.email}
+                </p>
+                <p>
+                  <strong>Bio:</strong> {creator.bio}
+                </p>
+                <p>
+                  <strong>Location:</strong> {creator.location}
+                </p>
+                <p>
+                  <strong>Projects Funded:</strong> {creator.projectsfunded}
+                </p>
+                <p>
+                  <strong>Amount Raised:</strong> {creator.amountraised}
+                </p>
+                <p>
+                  <strong>LinkedIn:</strong>{" "}
+                  <a
+                    href={creator.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {creator.linkedin}
+                  </a>
+                </p>
+                <p>
+                  <strong>Twitter:</strong>{" "}
+                  <a
+                    href={creator.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {creator.twitter}
+                  </a>
+                </p>
+                <p>
+                  <strong>GitHub:</strong>{" "}
+                  <a
+                    href={creator.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {creator.github}
+                  </a>
+                </p>
+                <p>
+                  <strong>Portfolio:</strong>{" "}
+                  <a
+                    href={creator.portfolio}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {creator.portfolio}
+                  </a>
+                </p>
+                <p>
+                  <strong>Past Experiences:</strong> {creator.pastexperiences}
+                </p>
+              </Panel>
+            </Collapse>
+          </Card>
+        )}
+        <Card
+          style={{  textAlign: "center", marginTop: 50 }}
+        >
+          <div>
+            <h3>Project AI</h3>
+            <p>{generatedResponse}</p>
+            <AntInput.TextArea
+              value={userQuestion}
+              onChange={(e) => setUserQuestion(e.target.value)}
+            />
             <br />
-            {/* <p>{generatedDescription}</p> */}
-            <ReactMarkdown>{generatedDescription}</ReactMarkdown>
-            {project && JSON.stringify(project, null, 2)}
+            <Button style={{marginTop: 20}} onClick={() => handleQuestion(userQuestion)}>Ask</Button>
           </div>
-        )}
-        {formLoading && (
-          <img
-            style={{ borderRadius: 50, marginTop: 30 }}
-            src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnF3eWJxd2ZtaXhmd3hsOGZlM3N1c3hmOTdzY3F6aWJnbDF3emN2YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/unQ3IJU2RG7DO/giphy.gif"
-          ></img>
-        )}
+        </Card>
       </div>
-    </div>
+    </main>
   );
 }

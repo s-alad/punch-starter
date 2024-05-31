@@ -1,7 +1,6 @@
 import { Box, Heading } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-import ChatUI from "../../pages/chat/Chat";
 import Post from "@/components/Post";
 import React from "react";
 
