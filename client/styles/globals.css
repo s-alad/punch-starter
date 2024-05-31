@@ -15,7 +15,7 @@ div#__next > div {
 }
 
 html {
-	display: flex;
+  background-color: black;
 }
 
 a {

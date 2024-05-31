@@ -1,6 +1,7 @@
+// Sidebar.tsx
+
 import React from "react";
-import { useEffect, useState } from "react";
-import { FaSearch, FaUser, FaHome} from "react-icons/fa";
+import { FaHome } from "react-icons/fa";
 import { MdOutlineExplore } from "react-icons/md";
 import s from "./sidebar.module.scss"
 import { useRouter } from "next/router";

@@ -1,4 +1,4 @@
-import React from "react";
+import { Box, Heading } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { FaSearch, FaUser, FaHome, FaRegUserCircle } from "react-icons/fa";
 import { FaArrowUp } from "react-icons/fa6";
@@ -7,6 +7,12 @@ import supabase from "@/utils/supabase";
 import Project from "@/models/project";
 import { useRouter } from "next/router";
 
+import { ChatUI } from "@/pages/chat";
+import Post from "@/components/Post";
+import React from "react";
+import { projectList } from "@/utils/constant";
+
+// find top post and display as card
 export default function Top() {
 
     const router = useRouter();

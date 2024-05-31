@@ -1,5 +1,5 @@
 
-module sui_crowdfund::crowd_funding_project {
+module sui_crowdfund::sui_crowdfund {
     use sui::coin::Coin;
     use sui::sui::SUI;
     use sui::balance::Balance;
@@ -38,6 +38,11 @@ module sui_crowdfund::crowd_funding_project {
         owner: address,
     }
 
+    /// An event emitted when a new project is created
+    public struct ProjectCreateEvent has copy, drop {
+        project_id: ID,
+    }
+
     /// Returns true if the project has received enough funds to meet its goal
     public fun is_funded(project: &Project): bool {
         project.total_funds >= project.fund_goal
@@ -70,6 +75,11 @@ module sui_crowdfund::crowd_funding_project {
             freeze_voters: vector::empty<address>(),
             frozen: false,
         };
+
+        let project_event = ProjectCreateEvent {
+            project_id: project.id.uid_to_inner(),
+        };
+        sui::event::emit(project_event);
 
         // We need to make sure that the project is PUBLICLY available for users who want to fund it
         transfer::share_object(project);
