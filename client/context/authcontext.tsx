@@ -42,6 +42,7 @@ interface IAuthContext {
     loading: boolean;
     connect: (provider: Providers) => void;
     disconnect: () => void;
+    askToRefresh: () => void;
 }
 
 const AuthContext = createContext<IAuthContext>({
@@ -49,7 +50,8 @@ const AuthContext = createContext<IAuthContext>({
     puncher: null,
     loading: false,
     connect: () => { },
-    disconnect: () => { }
+    disconnect: () => { },
+    askToRefresh: () => { },
 });
 
 export function useAuth() {
@@ -70,15 +72,17 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             console.log("SESSION", session)
             setSession(session)
             fetchUser(session?.user?.id!);
+            setLoading(false)
         })
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             console.log("CHANGE SESSION", session)
             setSession(session)
             fetchUser(session?.user?.id!);
+            setLoading(false)
         })
 
-        setLoading(false)
+        
         return () => subscription.unsubscribe()
     }, [])
 
@@ -107,6 +111,16 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                     wallet: {}
                 });
             }
+        }
+    }
+
+    async function askToRefresh() {
+        const { data: session, error } = await supabase.auth.refreshSession();
+        if (error) {
+            console.error("Failed to refresh session", error)
+        } else {
+            setSession(session.session);
+            fetchUser(session?.user?.id!);
         }
     }
 
@@ -177,8 +191,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     return (
-        <AuthContext.Provider value={{ session, puncher, loading, connect, disconnect }}>
-            {loading ? <div>Loading...</div> : children}
+        <AuthContext.Provider value={{ session, puncher, loading, connect, disconnect, askToRefresh }}>
+            {(loading || !puncher)  ? <div>Loading...</div> : children}
         </AuthContext.Provider>
     );
 };

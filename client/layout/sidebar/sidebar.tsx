@@ -9,7 +9,7 @@ import Link from "next/link";
 
 export default function Sidebar() {
     const router = useRouter();
-    const { user, raiser, connect } = useAuth()
+    const { connect } = useAuth()
 
     const feed = [
         {

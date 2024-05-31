@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function Navbar() {
     const router = useRouter();
-    const { user, raiser, connect } = useAuth()
+    const { puncher, connect } = useAuth()
     const [search, setSearch] = useState("");
     async function lookup() {
         if (search) {
