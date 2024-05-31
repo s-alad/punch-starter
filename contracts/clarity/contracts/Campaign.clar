@@ -6,7 +6,7 @@
 (define-constant ERR-ALREADY-VOTED (err u105))
 (define-constant ERR-CONTRACT-FROZEN (err u106))
 (define-constant ERR-OUT-OF-RANGE (err u107))
-(define-constant ERR-ALREADY-CONFIRMED (err 108))
+(define-constant ERR-ALREADY-CONFIRMED (err u108))
 
 ;; global variables
 (define-data-var funding-goal uint u0)
@@ -159,14 +159,14 @@
     (begin  
         (asserts! (<= index (var-get num-milestones)) ERR-OUT-OF-RANGE)
         (asserts! (default-to true (map-get? has-voted-milestone {user:tx-sender, milestone:index})) ERR-ALREADY-VOTED)
-        ;; (asserts! (> (get votes 
-        ;;                 (default-to 
-        ;;                     {submitted: false, votes: u0, approved: false, claimed: false, finishedMilestone:""} 
-        ;;                     (map-get? milestones index)
-        ;;                 )
-        ;;             )
-        ;;             (/ (var-get total-tokens) u2)
-        ;;         ) ERR-ALREADY-CONFIRMED)
+        (asserts! (> (get votes 
+                        (default-to 
+                            {submitted: false, votes: u0, approved: false, claimed: false, finishedMilestone:""} 
+                            (map-get? milestones index)
+                        )
+                    )
+                    (/ (var-get total-tokens) u2)
+                ) ERR-ALREADY-CONFIRMED)
         (map-insert milestones 
             index 
             (merge 

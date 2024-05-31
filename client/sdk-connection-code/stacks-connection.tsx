@@ -19,6 +19,7 @@ import {
 import { StacksTestnet, StacksMainnet } from "@stacks/network";
 import React, { useEffect, useState } from "react";
 import { useConnect, Connect, StacksProvider } from "@stacks/connect-react";
+import axios from 'axios';
 
 const appConfig = new AppConfig(["store_write", "publish_data"]);
 const userSession = new UserSession({ appConfig });
@@ -94,10 +95,11 @@ interface DeployContractProps {
   numberOfMilestones: number;
 }
 
-const [ address, setAddress ] = useState("");
-const [ contractName, setContractName ] = useState("");
+
 
 function DeployContract({fundingGoal, blockDuration, numberOfMilestones} : DeployContractProps) {
+  const [ address, setAddress ] = useState("");
+  const [ contractName, setContractName ] = useState("Campaign4");
 
   const functionArgs = [
     uintCV(fundingGoal),
@@ -133,7 +135,15 @@ function DeployContract({fundingGoal, blockDuration, numberOfMilestones} : Deplo
       },
       network: testnet,
       onFinish: (data) => {
-          setAddress("");
+          const url = `https://api.mainnet.hiro.so/extended/v1/tx/${data.txId}`;
+
+          try {
+              const response = axios.get(url);
+              console.log(response);
+          } catch (error) {
+              console.error(error);
+          }
+          setAddress("SP194138VA57FKR364CBH0DZBCXT7RS4BJEQZ8SP3");
           openContractCall(options);
       },
     });
@@ -183,23 +193,24 @@ function donateStacks(amount: number) {
   openContractCall(options);
 }
 
-// function claimRefundStacks() {
+function claimRefundStacks() {
 
-//   const options = {
-//       contractAddress: address,
-//       contractName: contractName,
-//       functionName: 'claim-refund',
-//       appDetails: {
-//         name: 'Punch Starter',
-//         icon: '',
-//       },
-//       onFinish: () => {
+  const options = {
+      contractAddress: address,
+      contractName: contractName,
+      functionName: 'claim-refund',
+      appDetails: {
+        name: 'Punch Starter',
+        icon: '',
+      },
+      functionArgs: [],
+      onFinish: () => {
 
-//       }
-//   };
+      }
+  };
 
-//   openContractCall(options);
-// }
+  openContractCall(options);
+}
 
 
 function claimMilestoneStacks(index: number) {
