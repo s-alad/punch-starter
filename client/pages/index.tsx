@@ -5,7 +5,7 @@ import ConnectWallet, {
 import { ConnectButton } from "@suiet/wallet-kit";
 import Head from "next/head";
 import Image from "next/image";
-import {SuiWalletConnect} from "@/sdk-connection-code/sui-connection";
+import { SuiWalletConnect } from "@/sdk-connection-code/sui-connection";
 import Top from "@/components/top/top";
 import s from "./index.module.scss";
 
@@ -26,8 +26,18 @@ export default function Home() {
         <div className={s.right}>
           <h1>Rising Touchers!</h1>
           <SuiWalletConnect />
-          <ConnectWallet />
-          <DeployContract />
+          <div
+            style={{
+              margin: 10,
+              padding: 10,
+              border: "1px solid black",
+              borderRadius: 10,
+            }}
+          >
+            <h4>Stacks Wallet</h4>
+            <ConnectWallet />
+            <DeployContract />
+          </div>
         </div>
       </main>
     </>
