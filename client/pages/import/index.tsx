@@ -4,6 +4,7 @@ import {
   ChatCompletionTool,
 } from "openai/resources/index.mjs";
 
+import {EditableProjectUI} from "@/components/EditableProject";
 import { Input } from "@chakra-ui/input";
 import OpenAI from "openai";
 import React from "react";
@@ -30,6 +31,8 @@ export default function ImportUI() {
     "https://github.com/WilliamUW/consensus"
   );
   const [generatedDescription, setGeneratedDescription] = useState(``);
+
+  let projectEdit = EditableProjectUI(project);
 
   const handleFormPopulationSubmit = async () => {
     setFormLoading(true);
@@ -117,7 +120,7 @@ export default function ImportUI() {
           const functionArgs = JSON.parse(toolCall.function.arguments);
 
           setProject(functionArgs);
-
+          console.log(functionArgs);
           setGeneratedDescription(
             responseMessage.content || "Form populated successfully!  "
           );
@@ -161,6 +164,7 @@ export default function ImportUI() {
         <Button onClick={handleFormPopulationSubmit}>
           Generate Project Description
         </Button>
+        {project && projectEdit}
         {generatedDescription && (
           <div
             className="mt-16 p-4 border rounded-md text-left"
