@@ -1,60 +1,65 @@
+// Sidebar.tsx
+
 import React from "react";
-import { useEffect, useState } from "react";
-import { FaSearch, FaUser, FaHome } from "react-icons/fa";
+import { FaHome } from "react-icons/fa";
 import { MdOutlineExplore } from "react-icons/md";
-import { useRouter } from "next/router";
-import { useAuth } from "@/context/authcontext";
-import Link from "next/link";
+import { Box, Divider } from "@chakra-ui/react";
+import SidebarButton from "@/components/SidebarButton"; // Import the new SidebarButton component
 
-export default function Sidebar() {
-  const router = useRouter();
-  const { user, raiser, connect } = useAuth();
-
-  const feed = [
-    {
-      name: "Home",
-      href: "/",
-      icon: FaHome,
-    },
-    {
-      name: "Explore",
-      href: "/explore",
-      icon: MdOutlineExplore,
-    },
-  ];
-  const subchains = [
-    {
-      name: "Stacks",
-      href: "/c/stacks",
-      icon: "https://cryptologos.cc/logos/stacks-stx-logo.png",
-    },
-    {
-      name: "Stellar",
-      href: "/c/stellar",
-      icon: "https://static-00.iconduck.com/assets.00/stellar-cryptocurrency-icon-512x508-6qztyo0f.png",
-    },
-    {
-      name: "Sui",
-      href: "/c/sui",
-      icon: "https://cryptologos.cc/logos/sui-sui-logo.png",
-    },
-  ];
-
-  return (
-    <nav>
-      {feed.map((feed, index) => (
-        <Link key={index} href={feed.href}>
-          {<feed.icon />}
-          <div>{feed.name}</div>
-        </Link>
-      ))}
-
-      {subchains.map((subchain, index) => (
-        <Link key={index} href={subchain.href}>
-          {<img src={subchain.icon} alt="icon" />}
-          <div>{subchain.name}</div>
-        </Link>
-      ))}
-    </nav>
-  );
+interface NavItem {
+  name: string;
+  href: string;
+  icon: string | React.ReactElement;
 }
+
+const feed: NavItem[] = [
+  {
+    name: "Home",
+    href: "/",
+    icon: <FaHome size={"20px"} />,
+  },
+  {
+    name: "Explore",
+    href: "/explore",
+    icon: <MdOutlineExplore size={"20px"} />,
+  },
+];
+
+const subchains: NavItem[] = [
+  {
+    name: "Stacks",
+    href: "/c/stacks",
+    icon: "https://cryptologos.cc/logos/stacks-stx-logo.png",
+  },
+  {
+    name: "Stellar",
+    href: "/c/stellar",
+    icon: "https://static-00.iconduck.com/assets.00/stellar-cryptocurrency-icon-512x508-6qztyo0f.png",
+  },
+  {
+    name: "Sui",
+    href: "/c/sui",
+    icon: "https://cryptologos.cc/logos/sui-sui-logo.png",
+  },
+];
+
+const Sidebar: React.FC = () => {
+  return (
+    <Box borderRight="1px" borderColor="#888b90">
+      <Box height="10px" /> {/* Spacer */}
+      <Box>
+        {feed.map((item, index) => (
+          <SidebarButton key={index} item={item} />
+        ))}
+      </Box>
+      <Divider my={4} /> {/* Chakra Divider */}
+      <Box>
+        {subchains.map((item, index) => (
+          <SidebarButton key={index} item={item} />
+        ))}
+      </Box>
+    </Box>
+  );
+};
+
+export default Sidebar;

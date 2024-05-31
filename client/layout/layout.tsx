@@ -10,10 +10,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Navbar />
         <Divider />
 
-        <div style={{ display: "flex", width: "100%", height: "100%" }}>
+        <Box display={"flex"} flexDirection={"row"}>
           <Sidebar />
-          {children}
-        </div>
+          <Box px="20px" py="10px">
+            {children}
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

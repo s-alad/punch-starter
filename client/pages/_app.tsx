@@ -31,7 +31,7 @@ const colors = {
   accent: ACCENT_COLOR,
 };
 
-// Extend the theme to set default text color to white
+// Extend the theme to set default text color to white and button styles
 const theme = extendTheme({
   colors,
   styles: {
@@ -42,10 +42,23 @@ const theme = extendTheme({
       },
     },
   },
+  components: {
+    Button: {
+      baseStyle: {
+        color: "white", // Set the default text color for buttons
+      },
+      variants: {
+        ghost: {
+          _hover: {
+            bg: "rgba(255, 255, 255, 0.1)", // Update the hover background color if needed
+          },
+        },
+      },
+    },
+  },
 });
 
 const queryClient = new QueryClient();
-
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>

@@ -19,7 +19,7 @@ export default function Home() {
           <Top />
         </div>
         <div>
-          <h1>Rising Touchers!</h1>
+          <h1> </h1>
           <ConnectWallet />
           <DeployContract />
         </div>
