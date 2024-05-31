@@ -1,5 +1,6 @@
 export default interface Milestone {
-    milestonename: string;
-    milestonedescription: string;
-/*     milestonenumber: number; */
+    name: string;
+    description: string;
+    amount: number;
+    expiry: string;
 }

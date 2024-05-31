@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { OnboardingFormData } from "@/validation/form";
 import { onboardingSchema } from "@/validation/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Input from "@/components/top/input/input";
+import Input from "@/components/input/input";
 import ImageInput from "@/components/image/image";
 import supabase from "@/utils/supabase";
 import Button from "@/components/button/button";

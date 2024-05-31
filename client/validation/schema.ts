@@ -13,24 +13,26 @@ export const onboardingSchema: ZodType<OnboardingFormData> = z
 export const startProjectSchema: ZodType<StartProjectFormData> = z
     .object({
         projectname: z.string().min(1).max(50),
+        chain: ZodEnum.create(["stacks", "sui"]),
     })
 
 export const milestoneSchema: ZodType<Milestone> = z
     .object({
-        milestonename: z.string().min(1).max(100),
-        milestonedescription: z.string().min(1).max(1000),
-        /* milestonenumber: z.number(), */
+        name: z.string().min(1).max(100),
+        description: z.string().min(1).max(1000),
+        amount: z.number().min(1),
+        expiry: z.string(),
     })
 
 export const createProjectSchema: ZodType<CreateProjectFormData> = z
     .object({
-        projectpunchline: z.string().min(1),
-        projectdescription: z.string().min(1),
+        punchline: z.string().min(1),
+        description: z.string().min(1),
         /* projectmarkdown: z.string().min(1).max(50), */
-        projectdisplayimage: z.custom<File>((v) => v instanceof File, {message: 'Image is required',}),
+        display: z.custom<File>((v) => v instanceof File, {message: 'Image is required',}),
         /* projectimages: z.array(z.string().min(1).max(50)), */
         /* tags: z.array(z.string().min(1).max(50)), */
         expiry: z.string(),
-        fundinggoal: z.number().min(1),
+        goal: z.number().min(1),
         milestones: z.array(milestoneSchema).min(1).max(5),
     })

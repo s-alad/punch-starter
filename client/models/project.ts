@@ -1,39 +1,20 @@
 
+import { CHAINS } from './chains';
 import Milestone from './milestone';
 
-export interface CreateProject {
-    projectpunchline: string;
-    projectdescription: string;
-    /* projectmarkdown: string; */
-    projectdisplayimage: string;
-    /* projectimages: string[]; */
-    tags: string[];
-    expiry: any;
-}
-
 export default interface Project {
-    // created on start
-    ownerstacksaddress: string;
-    projectname: string;
-    projectuid: string;
-    creator: string; // public key
-    createdat: any;
+    pid: string;
+    name: string;
+    chain: CHAINS;
+    display: string;
+    owner: {
+        username: string;
+        uid: string;
+    }
+    punchline: string;
+    description: string;
     deployed: boolean;
-
-    // to set
-    projectpunchline: string;
-    projectdescription: string;
-    /* projectmarkdown: string; */
-    projectdisplayimage: string;
-    /* projectimages: string[]; */
-    tags: string[];
-    expiry: any;
-
-    // to set - used in contract deploy
-    fundinggoal: number;
-    milestones: Milestone[];
-
-    // read
-    backers: string[]; // public keys
-    amountraised: number;
+    goal: number;
+    raised: number;
+    expiry: string;
 }

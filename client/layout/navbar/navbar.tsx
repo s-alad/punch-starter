@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { FaHandPointer, FaSearch, FaUser } from "react-icons/fa";
+import { FaHandPointer, FaSearch, FaUser, FaPlus } from "react-icons/fa";
 import s from "./navbar.module.scss"
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/authcontext";
@@ -42,9 +42,19 @@ export default function Navbar() {
                 ><FaSearch /></div>
             </div>
             <div className={s.actions}>
-                <Link href={'/connect'} className={s.connect}>
+                <Link href={
+                    puncher ? "/punch" : '/connect'} className={s.connect}>
+                    <FaPlus />
+                    <div>
+                        create
+                    </div>
+                </Link>
+                <Link href={
+                    puncher ? "/profile" : '/connect'} className={s.connect}>
                     <FaUser />
-                    <div>{"connect"}</div>
+                    <div>
+                        {puncher ? puncher.username : "Connect"}
+                    </div>
                 </Link>
             </div>
         </nav>

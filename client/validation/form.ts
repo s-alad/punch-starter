@@ -20,17 +20,18 @@ export type OnboardingFormData = {
 
 export type StartProjectFormData = {
     projectname: string;
+    chain: "stacks" | "sui"
 }
 
 export type CreateProjectFormData = {
-    projectpunchline: string;
-    projectdescription: string;
-    /* projectmarkdown: string; */
-    projectdisplayimage: File;
-    /* projectimages: string[]; */
+    punchline: string;
+    description: string;
+    /* markdown: string; */
+    display: File;
+    /* images: File[]; */
     /* tags: string[]; */
     expiry: string;
-    fundinggoal: number;
+    goal: number;
     milestones: Milestone[];
 };
 
