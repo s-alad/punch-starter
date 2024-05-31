@@ -14,8 +14,9 @@ export const SomeRandomWalletConnect = () => {
       <div>
         <button
           onClick={() => {
-            new SuiAdapter(wallet).createProject().then(() => {
-              alert("Project created");
+            new SuiAdapter(wallet).createProject().then((resData) => {
+              alert("Project created: " + resData);
+              console.log(resData);
             }).catch((err) => {
               alert("Error creating project: " + err);
             });

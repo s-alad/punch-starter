@@ -14,7 +14,7 @@ export class SuiAdapter extends ConnectionAdapter {
         this.wallet = wallet;
     }
 
-    public createProject(): Promise<void> {
+    public createProject(): Promise<any> {
         return new Promise((resolve, reject) => {
             if (!this.wallet.connected) {
                 reject("Wallet not connected");
@@ -28,16 +28,20 @@ export class SuiAdapter extends ConnectionAdapter {
                 });
                 tx.transferObjects([result], this.wallet.address!!)
                 const resData = this.wallet.signAndExecuteTransactionBlock({
-                    transactionBlock: tx
+                    transactionBlock: tx,
+                    options: {
+                        showEffects: true,
+                        showObjectChanges: true,
+                    }
                 })
                 
-                resolve()
+                resolve(resData)
             } catch (error) {
                 reject(error)
             }
         })
     }
-    public addMilestone(): Promise<void> {
+    public addMilestone(): Promise<any> {
         return new Promise((resolve, reject) => {
             if (!this.wallet.connected) {
                 reject("Wallet not connected");
@@ -48,17 +52,17 @@ export class SuiAdapter extends ConnectionAdapter {
                 let [result] = tx.moveCall({
                     target: `${this.packageObjectId}::${this.moduleName}::add_milestone`,
                     arguments: [
-                        tx.object("0xcdaac93855c5ff5198f80cee1412f5f1f2ea3c85f93c38f609ff1f3e6b3d6da7"),
-                        tx.object("0xd8c77ca28cb870c5a85c8654f10cc29d987efc5b8b13116ffdb054946f28157a"),
+                        tx.object("0xd1cebaab1883549980f1349eaeb33a711355f73dd912f624390e2ec675bf4461"),
+                        tx.object("0xb8de7c9e2b4447ea9833a3c560484643f8dc48d6536066013d8d709524b233f2"),
                         tx.pure(12300000)
                     ],
                 });
-                tx.transferObjects([result], this.wallet.address!!)
+                //tx.transferObjects([result], this.wallet.address!!)
                 const resData = this.wallet.signAndExecuteTransactionBlock({
                     transactionBlock: tx
                 })
                 
-                resolve()
+                resolve(resData)
             } catch (error) {
                 reject(error)
             }
