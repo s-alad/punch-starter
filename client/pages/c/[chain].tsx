@@ -20,6 +20,7 @@ export default function Chain() {
             .from('projects')
             .select(`*, owner!inner(username)`)
             .eq('chain', chain)
+            .eq('deployed', true)
             .limit(10)
 
         if (error) {

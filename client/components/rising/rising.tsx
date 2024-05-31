@@ -18,6 +18,7 @@ export default function Rising() {
         const { data, error } = await supabase
             .from('projects')
             .select(`*, owner!inner(username)`)
+            .eq('deployed', true)
             .order('upvotes', { ascending: false })
             .limit(5)
 

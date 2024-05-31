@@ -15,9 +15,11 @@ export default function Explore() {
 
         // also get the owner of the project
         // limit to 10
+        // where deployed is true
         const { data, error } = await supabase
             .from('projects')
             .select(`*, owner!inner(username)`)
+            .eq('deployed', true)
             .limit(10)
 
         if (error) {

@@ -22,9 +22,11 @@ export default function Top() {
     async function top() {
         // query the project with the longest length of the upvotes column
         // also get the owner of the project
+        // were deployed is true
         const { data, error } = await supabase
             .from('projects')
             .select(`*, owner!inner(username)`)
+            .eq('deployed', true)
             .order('upvotes', { ascending: false })
             .limit(1)
 
