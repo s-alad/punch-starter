@@ -20,10 +20,17 @@ This repository uses the recommended structure for a Soroban project:
 - Contracts should have their own `Cargo.toml` files that rely on the top-level `Cargo.toml` workspace for their dependencies.
 - Frontend libraries can be added to the top-level directory as well. If you initialized this project with a frontend template via `--frontend-template` you will have those files already included.
 
-soroban contract deploy \
-  --wasm-hash 8d6044d04a3626e19be7dc0a3d145273ab5be05815225907a57013d76abb2d69 \
+Working hello contract:
+
+soroban contract invoke \
+  --id CALDCP7TEUU2Z463ONMGAXCOK6K4KDVGKX47AQLUFOOSBY6AIJTK25OA \
   --source alice \
-  --network testnet
+  --network testnet \
+  -- \
+  hello \
+  --to RPC
+
+Working increment contract:
 
 soroban contract invoke \
   --id CA5JWSXCSIJXCHRSKH2C52L3WH4DB33BIPCSJRTRVN57NTQVTMT44SK3 \
@@ -31,3 +38,17 @@ soroban contract invoke \
   --network testnet \
   -- \
   increment
+
+soroban contract invoke \
+  --id CA5JWSXCSIJXCHRSKH2C52L3WH4DB33BIPCSJRTRVN57NTQVTMT44SK3 \
+  --source alice \
+  --network testnet \
+  -- \
+  decrement
+
+soroban contract invoke \
+  --id CA5JWSXCSIJXCHRSKH2C52L3WH4DB33BIPCSJRTRVN57NTQVTMT44SK3 \
+  --source alice \
+  --network testnet \
+  -- \
+  reset
