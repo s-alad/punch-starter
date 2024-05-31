@@ -1,10 +1,12 @@
-import Head from "next/head";
-import Image from "next/image";
-
-import Top from "@/components/top/top";
 import ConnectWallet, {
   DeployContract,
 } from "@/sdk-connection-code/stacks-connection";
+
+import ChatUI from "@/components/Chat";
+import Head from "next/head";
+import Image from "next/image";
+import Top from "@/components/top/top";
+
 export default function Home() {
   return (
     <>
