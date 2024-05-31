@@ -13,30 +13,29 @@ interface Post {
 
 const examplePosts: Post[] = [
   {
-    projectName: "Project 1",
-    author: "Author 1",
-    description: "Description of Project 1",
-    image:
-      "https://chumley.barstoolsports.com/union/2024/04/19/zuck-beard.e8aec17b.jpeg?fit=bounds&format=pjpg&auto=webp&quality=85%2C75",
-    upvoteCount: 10,
+    projectName: "BeFit",
+    author: "Xavier D'Mello & William Wang",
+    description:
+      "BeFit revolutionizes fitness motivation by blending the spontaneity of BeReal with the accountability and rewards of exercising. At random times, BeFit prompts users to",
+    image: "./befit.jpeg",
+    upvoteCount: 71,
     onUpvote: () => console.log("Upvoted Project 1"),
   },
   {
-    projectName: "Project 2",
-    author: "Author 2",
-    description: "Description of Project 2",
-    image:
-      "https://chumley.barstoolsports.com/union/2024/04/19/zuck-beard.e8aec17b.jpeg?fit=bounds&format=pjpg&auto=webp&quality=85%2C75",
-    upvoteCount: 20,
+    projectName: "Movelo",
+    author: "Colin, Wes, & Saad",
+    description: "",
+    image: "./movelo.png",
+    upvoteCount: 62,
     onUpvote: () => console.log("Upvoted Project 2"),
   },
   {
-    projectName: "Project 2",
-    author: "Author 2",
-    description: "Description of Project 2",
-    image:
-      "https://chumley.barstoolsports.com/union/2024/04/19/zuck-beard.e8aec17b.jpeg?fit=bounds&format=pjpg&auto=webp&quality=85%2C75",
-    upvoteCount: 20,
+    projectName: "ZkVote",
+    author: "Colin",
+    description:
+      "A new way to commute. Pay for your morning coffee with your bike ride.",
+    image: "/zkvote.png",
+    upvoteCount: 25,
     onUpvote: () => console.log("Upvoted Project 2"),
   },
 ];
@@ -52,7 +51,7 @@ export default function Explore() {
         alignItems="center"
       >
         {examplePosts.map((post, index) => (
-          <Box width={"350px"}>
+          <Box maxW={"350px"} height="450px">
             <Post
               key={index}
               projectName={post.projectName}
