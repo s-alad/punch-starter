@@ -12,6 +12,7 @@ import {
   useColorModeValue,
   useTheme,
   Flex,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
@@ -24,6 +25,11 @@ export default function Navbar() {
   const accentColor = theme.colors.accent;
   const inputBgColor = useColorModeValue("black", "black");
   const textColor = useColorModeValue("white", "white");
+
+  const logoSrc = useBreakpointValue({
+    base: "/mobile-logo.png",
+    md: "/logo.png",
+  });
 
   async function lookup() {
     if (search) {
@@ -51,7 +57,7 @@ export default function Navbar() {
           width={{ base: "100%", md: "auto" }}
           mb={{ base: "15px", md: "0" }}
         >
-          <Image src="/logo.png" height="25px" />
+          <Image src={logoSrc} height="25px" />
 
           <Box display={{ base: "block", md: "none" }} ml="auto">
             <ConnectButton />
@@ -60,7 +66,7 @@ export default function Navbar() {
 
         <Box
           flex={{ base: "1" }}
-          mx={{ base: "0", md: "50px" }} // Added margin for desktop view
+          mx={{ base: "0", md: "20px" }} // Added margin for desktop view
           width={{ base: "100%", md: "auto" }}
         >
           <InputGroup height="30px" width="100%">
