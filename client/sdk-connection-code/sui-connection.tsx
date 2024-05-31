@@ -21,6 +21,16 @@ export const SomeRandomWalletConnect = () => {
             });
           }}
           >Create Project</button>
+          <button
+            onClick={() => {
+              new SuiAdapter(wallet).addMilestone().then(() => {
+                alert("Milestone added");
+              }).catch((err) => {
+                alert("Error adding milestone: " + err);
+              });
+
+            }}
+          >Add Milestone</button>
       </div>
     </div>
     </WalletProvider>

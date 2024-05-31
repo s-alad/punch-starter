@@ -31,7 +31,6 @@ export class SuiAdapter extends ConnectionAdapter {
                     transactionBlock: tx
                 })
                 
-
                 resolve()
             } catch (error) {
                 reject(error)
@@ -39,7 +38,31 @@ export class SuiAdapter extends ConnectionAdapter {
         })
     }
     public addMilestone(): Promise<void> {
-        throw new Error("Method not implemented.");
+        return new Promise((resolve, reject) => {
+            if (!this.wallet.connected) {
+                reject("Wallet not connected");
+                return;
+            }
+            try {
+                const tx = new TransactionBlock();
+                let [result] = tx.moveCall({
+                    target: `${this.packageObjectId}::${this.moduleName}::add_milestone`,
+                    arguments: [
+                        tx.object("0xcdaac93855c5ff5198f80cee1412f5f1f2ea3c85f93c38f609ff1f3e6b3d6da7"),
+                        tx.object("0xd8c77ca28cb870c5a85c8654f10cc29d987efc5b8b13116ffdb054946f28157a"),
+                        tx.pure(12300000)
+                    ],
+                });
+                tx.transferObjects([result], this.wallet.address!!)
+                const resData = this.wallet.signAndExecuteTransactionBlock({
+                    transactionBlock: tx
+                })
+                
+                resolve()
+            } catch (error) {
+                reject(error)
+            }
+        })
     }
     public fundProject(): Promise<void> {
         throw new Error("Method not implemented.");
