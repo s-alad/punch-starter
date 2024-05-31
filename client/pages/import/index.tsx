@@ -75,6 +75,7 @@ export default function ImportUI() {
                 },
               },
               required: [
+                "projectname",
                 "projectpunchline",
                 "projectdescription",
                 "expiry",
