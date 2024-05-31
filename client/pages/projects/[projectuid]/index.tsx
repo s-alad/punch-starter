@@ -340,7 +340,7 @@ export default function Projects() {
                             <div className={s.divider}></div>
                             <div className={s.commentswrapper}>
                                 <div className={s.top}>
-                                    <div className={`${s.upvote} ${project.upvoteslist?.includes(puncher!.uid) ? s.upvoted : ""}`}
+                                    <div className={`${s.upvote} ${puncher && project.upvoteslist?.includes(puncher!.uid) ? s.upvoted : ""}`}
                                         onClick={addUpvote}
                                     >
                                         <FaArrowUp />
