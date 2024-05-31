@@ -10,23 +10,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     {
       id: 1,
       projectName: "BeFit",
-      upvoteCount: 0,
-      thumbnailUrl:
-        "https://chumley.barstoolsports.com/union/2024/04/19/zuck-beard.e8aec17b.jpeg?fit=bounds&format=pjpg&auto=webp&quality=85%2C75",
+      upvoteCount: 71,
+      thumbnailUrl: "/befit.jpeg",
     },
     {
       id: 2,
-      projectName: "Glazed",
-      upvoteCount: 90,
-      thumbnailUrl:
-        "https://chumley.barstoolsports.com/union/2024/04/19/zuck-beard.e8aec17b.jpeg?fit=bounds&format=pjpg&auto=webp&quality=85%2C75",
+      projectName: "Movelo",
+      upvoteCount: 62,
+      thumbnailUrl: "/movelo.png",
     },
     {
       id: 3,
-      projectName: "Cat",
-      upvoteCount: 1,
-      thumbnailUrl:
-        "https://chumley.barstoolsports.com/union/2024/04/19/zuck-beard.e8aec17b.jpeg?fit=bounds&format=pjpg&auto=webp&quality=85%2C75",
+      projectName: "ZkVote",
+      upvoteCount: 25,
+      thumbnailUrl: "/zkvote.png",
     },
   ]);
 
