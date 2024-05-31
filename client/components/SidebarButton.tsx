@@ -1,54 +1,40 @@
+// SidebarButton.tsx
+
 import React from "react";
-import { Box, SimpleGrid } from "@chakra-ui/react";
-import Post from "@/components/Post";
+import Link from "next/link";
+import { Button } from "@chakra-ui/react";
 
-interface Post {
-  projectName: string;
-  author: string;
-  description: string;
-  image: string;
-  upvoteCount: number;
-  onUpvote: () => void;
+interface SidebarButtonProps {
+  item: {
+    name: string;
+    href: string;
+    icon: string | React.ReactElement;
+  };
 }
 
-const examplePosts: Post[] = [
-  {
-    projectName: "Project 1",
-    author: "Author 1",
-    description: "Description of Project 1",
-    image:
-      "https://chumley.barstoolsports.com/union/2024/04/19/zuck-beard.e8aec17b.jpeg?fit=bounds&format=pjpg&auto=webp&quality=85%2C75",
-    upvoteCount: 10,
-    onUpvote: () => console.log("Upvoted Project 1"),
-  },
-  {
-    projectName: "Project 2",
-    author: "Author 2",
-    description: "Description of Project 2",
-    image:
-      "https://chumley.barstoolsports.com/union/2024/04/19/zuck-beard.e8aec17b.jpeg?fit=bounds&format=pjpg&auto=webp&quality=85%2C75",
-    upvoteCount: 20,
-    onUpvote: () => console.log("Upvoted Project 2"),
-  },
-  // Add more example posts...
-];
-
-export default function Explore() {
+const SidebarButton: React.FC<SidebarButtonProps> = ({ item }) => {
   return (
-    <Box>
-      <SimpleGrid columns={2} spacing={4}>
-        {examplePosts.map((post, index) => (
-          <Post
-            key={index}
-            projectName={post.projectName}
-            author={post.author}
-            description={post.description}
-            image={post.image}
-            upvoteCount={post.upvoteCount}
-            onUpvote={post.onUpvote}
-          />
-        ))}
-      </SimpleGrid>
-    </Box>
+    <Link href={item.href}>
+      <Button
+        variant="ghost"
+        textColor={"white"}
+        _hover={{ bg: "rgba(255, 255, 255, 0.1)" }}
+        leftIcon={
+          typeof item.icon === "string" ? (
+            <img src={item.icon} alt="icon" width="20px" />
+          ) : (
+            item.icon
+          )
+        }
+        justifyContent="flex-start"
+        px={4}
+        py={2}
+        w="100%"
+      >
+        {item.name}
+      </Button>
+    </Link>
   );
-}
+};
+
+export default SidebarButton;
