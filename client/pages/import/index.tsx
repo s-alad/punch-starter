@@ -1,14 +1,15 @@
-import { Button, Textarea } from "@chakra-ui/react";
+import { Button, Heading, Textarea } from "@chakra-ui/react";
 import {
   ChatCompletionMessageParam,
   ChatCompletionTool,
 } from "openai/resources/index.mjs";
 
-import {EditableProjectUI} from "@/components/EditableProject";
+import { EditableProjectUI } from "@/components/EditableProject";
 import { Input } from "@chakra-ui/input";
 import OpenAI from "openai";
 import React from "react";
 import ReactMarkdown from "react-markdown";
+import {emptyProject} from "@/utils/constant";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -22,7 +23,7 @@ export default function ImportUI() {
   const [loading, setLoading] = useState<boolean>(false);
   const [formLoading, setFormLoading] = useState<boolean>(false);
 
-  const [project, setProject] = useState();
+  const [project, setProject] = useState(emptyProject);
 
   const [descriptionInput, setDescriptionInput] = useState(
     "A crowdfunding platform for blockchain projects."
@@ -138,6 +139,9 @@ export default function ImportUI() {
         className="flex flex-col items-center justify-center mt-4"
         style={{ width: "50%" }}
       >
+        <Heading as="h1" size="lg" mb="4">
+          Project Creation
+        </Heading>
         <h3 className="mb-2 text-lg font-semibold">
           Brief Project Description:
         </h3>
@@ -164,8 +168,20 @@ export default function ImportUI() {
         <Button onClick={handleFormPopulationSubmit}>
           Generate Project Description
         </Button>
+        {formLoading && (
+          <img
+            style={{ borderRadius: 50, marginTop: 30 }}
+            src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnF3eWJxd2ZtaXhmd3hsOGZlM3N1c3hmOTdzY3F6aWJnbDF3emN2YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/unQ3IJU2RG7DO/giphy.gif"
+          ></img>
+        )}
+      </div>
+
+      <div
+        className="flex flex-col items-center justify-center mt-4"
+        style={{ width: "50%" }}
+      >
         {project && projectEdit}
-        {generatedDescription && (
+        {false && generatedDescription && (
           <div
             className="mt-16 p-4 border rounded-md text-left"
             style={{ maxWidth: "100% " }}
@@ -173,16 +189,9 @@ export default function ImportUI() {
             <br />
             <h3 className="text-xl font-bold">Generated Project Description</h3>
             <br />
-            {/* <p>{generatedDescription}</p> */}
             <ReactMarkdown>{generatedDescription}</ReactMarkdown>
             {project && JSON.stringify(project, null, 2)}
           </div>
-        )}
-        {formLoading && (
-          <img
-            style={{ borderRadius: 50, marginTop: 30 }}
-            src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnF3eWJxd2ZtaXhmd3hsOGZlM3N1c3hmOTdzY3F6aWJnbDF3emN2YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/unQ3IJU2RG7DO/giphy.gif"
-          ></img>
         )}
       </div>
     </div>

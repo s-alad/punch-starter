@@ -71,3 +71,24 @@ export const exampleProject = {
     },
   ],
 };
+
+export const emptyProject = {
+    projectpunchline: "",
+    projectdescription: "",
+    expiry: "2023-12-31",
+    fundinggoal: 0,
+    milestones: [
+      {
+        milestonename: "",
+        milestonedescription: ""
+      },
+      {
+        milestonename: "",
+        milestonedescription: ""
+      },
+      {
+        milestonename: "",
+        milestonedescription: ""
+      }
+    ]
+  };

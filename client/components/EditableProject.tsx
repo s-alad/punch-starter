@@ -11,33 +11,10 @@ import {
 } from "@chakra-ui/react";
 import React, { use, useEffect, useState } from "react";
 
-const exampleProject = {
-  projectpunchline: "A crowdfunding platform for blockchain projects",
-  projectdescription:
-    "A platform that enables crowdfunding for blockchain projects, providing a decentralized way to fund innovative ideas in the blockchain space. It allows project creators to raise funds from a global community of supporters interested in blockchain technology and decentralized applications.",
-  expiry: "2023-12-31",
-  fundinggoal: 50000,
-  milestones: [
-    {
-      milestonename: "Platform Development",
-      milestonedescription:
-        "Complete the development of the crowdfunding platform, including secure payment integration and project submission features.",
-    },
-    {
-      milestonename: "Community Building",
-      milestonedescription:
-        "Grow and engage a community of blockchain enthusiasts and project backers on the platform.",
-    },
-    {
-      milestonename: "Partnerships",
-      milestonedescription:
-        "Establish partnerships with blockchain projects, accelerators, and industry experts to expand the reach of the platform.",
-    },
-  ],
-};
+import {emptyProject} from "@/utils/constant";
 
 export function EditableProjectUI(inputProject: any) {
-  const [project, setProject] = useState(null);
+  const [project, setProject] = useState(emptyProject);
 
   useEffect(() => {
     if (inputProject) {
