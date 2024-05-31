@@ -45,7 +45,11 @@ const subchains: NavItem[] = [
 
 const Sidebar: React.FC = () => {
   return (
-    <Box borderRight="1px" borderColor="#888b90">
+    <Box
+      borderRight="1px"
+      borderColor="#888b90"
+      width={{ base: "80%", md: "20%" }}
+    >
       <Box height="10px" /> {/* Spacer */}
       <Heading size={"sm"} fontWeight={"400"} color={"#d3d3d3"} ml={4} mb={1}>
         Feeds
