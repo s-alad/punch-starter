@@ -5,10 +5,10 @@ import {
   placeholderImageUrl,
 } from "@/utils/constant";
 
-import { Input as AntInput } from "antd";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 import OpenAI from "openai";
 import React from "react";
+import { Textarea } from "@chakra-ui/react";
 import { useState } from "react";
 
 const { Panel } = Collapse;
@@ -220,7 +220,7 @@ export function ChatUI(project: any, creator: any) {
           <div>
             <h3 style={{ fontSize: 20 }}>{chatHeader}</h3>
             <p>{generatedResponse}</p>
-            <AntInput.TextArea
+            <Textarea
               value={userQuestion}
               onChange={(e) => setUserQuestion(e.target.value)}
             />
