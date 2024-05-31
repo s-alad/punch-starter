@@ -1,0 +1,17 @@
+dev_dependencies = { soroban-sdk = { workspace = true } }
+[package]
+name = "soroban-increment-contract"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+doctest = false
+
+[dependencies]
+soroban-sdk = "21.0.1-preview.3"
+soroban-token-sdk = "21.0.1-preview.3"
+
+[dev-dependencies]
+soroban-sdk = { version = "21.0.1-preview.3", features = ["testutils"] }
