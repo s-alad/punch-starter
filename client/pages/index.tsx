@@ -8,8 +8,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Lift</title>
-        <meta name="description" content="lift" />
+        <title>Punch Starter</title>
+        <meta name="description" content="punch" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
