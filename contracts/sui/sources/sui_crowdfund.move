@@ -1,5 +1,5 @@
 
-module sui_crowdfund::crowd_funding_project {
+module sui_crowdfund::sui_crowdfund {
     use sui::coin::Coin;
     use sui::sui::SUI;
     use sui::balance::Balance;
