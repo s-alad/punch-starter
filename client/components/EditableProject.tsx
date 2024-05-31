@@ -23,7 +23,7 @@ export function EditableProjectUI(inputProject: any) {
     }
   }, [inputProject]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
     setProject({
       ...project,
@@ -31,7 +31,7 @@ export function EditableProjectUI(inputProject: any) {
     });
   };
 
-  const handleMilestoneChange = (index, e) => {
+  const handleMilestoneChange = (index: number, e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>): any => {
     const { name, value } = e.target;
     const updatedMilestones = project.milestones.map((milestone, i) =>
       i === index ? { ...milestone, [name]: value } : milestone
