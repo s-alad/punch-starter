@@ -3,7 +3,7 @@
 import React from "react";
 import { FaHome } from "react-icons/fa";
 import { MdOutlineExplore } from "react-icons/md";
-import { Box, Divider } from "@chakra-ui/react";
+import { Box, Divider, Heading } from "@chakra-ui/react";
 import SidebarButton from "@/components/SidebarButton"; // Import the new SidebarButton component
 
 interface NavItem {
@@ -47,12 +47,18 @@ const Sidebar: React.FC = () => {
   return (
     <Box borderRight="1px" borderColor="#888b90">
       <Box height="10px" /> {/* Spacer */}
+      <Heading size={"sm"} fontWeight={"400"} color={"#d3d3d3"} ml={4} mb={1}>
+        Feeds
+      </Heading>
       <Box>
         {feed.map((item, index) => (
           <SidebarButton key={index} item={item} />
         ))}
       </Box>
       <Divider my={4} /> {/* Chakra Divider */}
+      <Heading size={"sm"} fontWeight={"400"} color={"#d3d3d3"} ml={4} mb={1}>
+        Platforms
+      </Heading>
       <Box>
         {subchains.map((item, index) => (
           <SidebarButton key={index} item={item} />
