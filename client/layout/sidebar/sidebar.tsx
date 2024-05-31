@@ -1,9 +1,10 @@
 // Sidebar.tsx
 
-import React from "react";
+import { Box, Divider, Heading } from "@chakra-ui/react";
+
 import { FaHome } from "react-icons/fa";
 import { MdOutlineExplore } from "react-icons/md";
-import { Box, Divider, Heading } from "@chakra-ui/react";
+import React from "react";
 import SidebarButton from "@/components/SidebarButton"; // Import the new SidebarButton component
 
 interface NavItem {
@@ -28,23 +29,23 @@ const feed: NavItem[] = [
 const subchains: NavItem[] = [
   {
     name: "Stacks",
-    href: "/c/stacks",
+    href: "/",
     icon: "https://cryptologos.cc/logos/stacks-stx-logo.png",
   },
   {
     name: "Stellar",
-    href: "/c/stellar",
+    href: "/",
     icon: "https://static-00.iconduck.com/assets.00/stellar-cryptocurrency-icon-512x508-6qztyo0f.png",
   },
   {
     name: "Sui",
-    href: "/c/sui",
+    href: "/",
     icon: "https://cryptologos.cc/logos/sui-sui-logo.png",
   },
   {
     name: "Rootstock",
-    href: "/c/rootstock",
-    icon: "https://asset.brandfetch.io/idlHNCkrJa/idvZdDhAxY.jpeg"
+    href: "/",
+    icon: "https://asset.brandfetch.io/idlHNCkrJa/idvZdDhAxY.jpeg",
   },
 ];
 
