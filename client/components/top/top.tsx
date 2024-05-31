@@ -1,7 +1,10 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import Post from "@/components/Post";
 import { Box, Heading } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+
+import ChatUI from "../../pages/chat/Chat";
+import Post from "@/components/Post";
+import React from "react";
+
 // find top post and display as card
 export default function Top() {
   return (
